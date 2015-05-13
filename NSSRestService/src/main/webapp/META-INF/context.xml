@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<Context>
+
+	<Resource name="jdbc/qwixerv" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/qwixerv" username="root" password="mysql@admin" />
+
+</Context>
