@@ -12,7 +12,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * Java configuration based deployment descriptor. Registers Spring Dispatcher
- * Servlet and defines package for WebConfig location.
+ * Servlet and defines location for WebConfig location.
  */
 public class WebAppInit implements WebApplicationInitializer {
 
