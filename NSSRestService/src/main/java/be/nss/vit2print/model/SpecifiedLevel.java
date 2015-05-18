@@ -2,18 +2,47 @@ package be.nss.vit2print.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "namePath", "hasCollections", "hasChildren",
+		"scope", "searchKeywords", "name", "idPath", "assetCount", "type",
+		"actions" })
 public class SpecifiedLevel {
 
+	@JsonProperty("id")
 	private int id;
+
+	@JsonProperty("namePath")
 	private String namePath;
+
+	@JsonProperty("hasCollections")
 	private String hasCollections;
+
+	@JsonProperty("hasChildren")
 	private String hasChildren;
+
+	@JsonProperty("scope")
 	private String scope;
+
+	@JsonProperty("name")
 	private String name;
+
+	@JsonProperty("idPath")
 	private String idPath;
+
+	@JsonProperty("assetCount")
 	private int assetCount;
+
+	@JsonProperty("type")
 	private String type;
-	private LevelAction actions;
+
+	@JsonProperty("actions")
+	private LevelAction levelAction;
+
+	@JsonProperty("searchKeywords")
 	private List<SearchKeyword> searchKeywords;
 
 	public SpecifiedLevel() {
@@ -92,12 +121,12 @@ public class SpecifiedLevel {
 		this.type = type;
 	}
 
-	public LevelAction getActions() {
-		return actions;
+	public LevelAction getLevelAction() {
+		return levelAction;
 	}
 
-	public void setActions(LevelAction actions) {
-		this.actions = actions;
+	public void setLevelAction(LevelAction levelAction) {
+		this.levelAction = levelAction;
 	}
 
 	public List<SearchKeyword> getSearchKeywords() {

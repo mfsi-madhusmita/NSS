@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import be.nss.vit2print.dto.ErrorDTO;
 import be.nss.vit2print.dto.GetLevelsInputDTO;
+import be.nss.vit2print.model.LevelData;
 import be.nss.vit2print.service.LevelService;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -31,14 +32,14 @@ public class LevelController {
 
 	/**
 	 * HTTP GET call to retrieve levels sample url is
-	 * http://localhost:8080/NSS/getLevels
+	 * http://localhost:8080/NSS/admin/getLevels
 	 * ?authenticationString=abcdef&libraryId=3_5&options={"countLevelAssets":
 	 * true,"enablePrivateLibrary" : false}
 	 */
 	@RequestMapping(value = "/admin/getLevels", method = RequestMethod.GET)
-	public String getLevels(@Valid GetLevelsInputDTO getLevelsInputDTO)
+	public LevelData getLevels(@Valid GetLevelsInputDTO getLevelsInputDTO)
 			throws JsonParseException, JsonMappingException, IOException {
-		return levelService.getLevels(getLevelsInputDTO);
+		return levelService.getLevelData(getLevelsInputDTO);
 	}
 
 	/**

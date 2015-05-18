@@ -6,10 +6,24 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private AuthenticationEntryPoint authenticationEntryPoint;
+
+	@Autowired
+	private ApplicationAuthenticationFailureHandler authenticationFailureHandler;
+
+	@Autowired
+	private ApplicationAuthenticationSuccessHandler authenticationSuccessHandler;
+
+	@Autowired
+	private LogoutSuccessHandler logoutSuccessHandler;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth)
@@ -23,7 +37,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/admin/**")
-				.access("hasRole('ROLE_ADMIN')").and().formLogin();
+				.access("hasRole('ROLE_ADMIN')");
+		http.csrf().disable();
+		http.exceptionHandling().authenticationEntryPoint(
+				authenticationEntryPoint);
+		http.formLogin().failureHandler(authenticationFailureHandler);
+		http.formLogin().successHandler(authenticationSuccessHandler);
+		http.logout().logoutSuccessHandler(logoutSuccessHandler);
 	}
 
 }

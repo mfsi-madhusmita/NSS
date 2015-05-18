@@ -1,15 +1,40 @@
 package be.nss.vit2print.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "searchDoubles", "approveAsset", "moveAsset", "editLevel",
+		"uploadAsset", "addSubLevel", "copyAsset", "disapproveAsset",
+		"deleteLevel" })
 public class LevelAction {
 
+	@JsonProperty("searchDoubles")
 	private String searchDoubles;
+
+	@JsonProperty("approveAsset")
 	private String approveAsset;
+
+	@JsonProperty("moveAsset")
 	private String moveAsset;
+
+	@JsonProperty("editLevel")
 	private String editLevel;
+
+	@JsonProperty("uploadAsset")
 	private String uploadAsset;
+
+	@JsonProperty("addSubLevel")
 	private String addSubLevel;
+
+	@JsonProperty("copyAsset")
 	private String copyAsset;
+
+	@JsonProperty("disapproveAsset")
 	private String disapproveAsset;
+
+	@JsonProperty("deleteLevel")
 	private String deleteLevel;
 
 	public LevelAction() {

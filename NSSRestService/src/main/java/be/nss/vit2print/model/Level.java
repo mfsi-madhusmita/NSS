@@ -1,17 +1,43 @@
 package be.nss.vit2print.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "namePath", "parentId", "hasChildren", "scope",
+		"name", "idPath", "assetCount", "type", "actions" })
 public class Level {
 
+	@JsonProperty("id")
 	private String id;
+
+	@JsonProperty("namePath")
 	private String namePath;
+
+	@JsonProperty("parentId")
 	private int parentId;
+
+	@JsonProperty("hasChildren")
 	private String hasChildren;
+
+	@JsonProperty("scope")
 	private String scope;
+
+	@JsonProperty("name")
 	private String name;
+
+	@JsonProperty("idPath")
 	private String idPath;
+
+	@JsonProperty("assetCount")
 	private int assestCount;
+
+	@JsonProperty("type")
 	private String type;
-	private LevelAction actions;
+
+	@JsonProperty("actions")
+	private LevelAction levelAction;
 
 	public Level() {
 		// Default Constructor
@@ -89,11 +115,11 @@ public class Level {
 		this.type = type;
 	}
 
-	public LevelAction getActions() {
-		return actions;
+	public LevelAction getLevelAction() {
+		return levelAction;
 	}
 
-	public void setActions(LevelAction actions) {
-		this.actions = actions;
+	public void setLevelAction(LevelAction levelAction) {
+		this.levelAction = levelAction;
 	}
 }
