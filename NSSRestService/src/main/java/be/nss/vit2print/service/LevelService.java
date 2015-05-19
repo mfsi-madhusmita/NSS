@@ -43,6 +43,10 @@ public class LevelService {
 				.getLibraryId());
 		String libraryId = parsedLibraryId != null ? parsedLibraryId[0]
 				: getLevelsInputDTO.getLibraryId();
+		/*
+		 * if '_' token is not there in the library id, set category id to
+		 * default 0
+		 */
 		String categoryId = parsedLibraryId != null ? parsedLibraryId[1]
 				: DEFAULT_CATEGORY_ID;
 
@@ -51,6 +55,9 @@ public class LevelService {
 
 		List<SearchKeyword> searchKeywords = null;
 
+		/*
+		 * if category id is 0 only then call for findSearchKeywords method
+		 */
 		if (DEFAULT_CATEGORY_ID.equals(categoryId)) {
 			searchKeywords = levelRepository.findSearchKeywords(libraryId);
 		}
