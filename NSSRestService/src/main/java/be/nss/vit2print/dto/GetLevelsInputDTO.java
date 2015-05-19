@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class GetLevelsInputDTO {
 
 	@NotBlank(message = INVALID_AUTHENTICATION_STRING)
-	private String authenticationString;
+	private String username;
 
 	@NotBlank(message = INVALID_LIBRARY_ID)
 	private String libraryId;
@@ -21,12 +21,12 @@ public class GetLevelsInputDTO {
 		// Default constructor
 	}
 
-	public String getAuthenticationString() {
-		return authenticationString;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setAuthenticationString(String authenticationString) {
-		this.authenticationString = authenticationString;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getLibraryId() {

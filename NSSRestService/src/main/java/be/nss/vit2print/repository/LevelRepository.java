@@ -25,7 +25,7 @@ public class LevelRepository extends JdbcDaoSupport {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static final String GETLEVELS_SQL = "call sp_PhotoVit_GetLevels(?,?,?)";
-	private static final String GETSEARCHKEYWORDS_SQL = "call sp_PhotoVit_GetSearchKeywords(?,?,?)";
+	private static final String GETSEARCHKEYWORDS_SQL = "call sp_PhotoVit_GetSearchKeywords(?)";
 	private static final String GETSPECIFIEDLEVEL_SQL = "call sp_PhotoVit_GetSpecifiedLevel(?,?,?)";
 
 	@Autowired
@@ -42,14 +42,13 @@ public class LevelRepository extends JdbcDaoSupport {
 	/**
 	 * repository method to find levels by libraryid and categoryid
 	 */
-	public List<Level> findLevels(String authenticationString,
-			String libraryId, String categoryId) {
+	public List<Level> findLevels(String username, String libraryId,
+			String categoryId) {
 		List<Level> levels = null;
 		try {
-			levels = getJdbcTemplate()
-					.query(GETLEVELS_SQL,
-							new Object[] { authenticationString, libraryId,
-									categoryId }, new LevelRowMapper());
+			levels = getJdbcTemplate().query(GETLEVELS_SQL,
+					new Object[] { username, libraryId, categoryId },
+					new LevelRowMapper());
 		} catch (DataAccessException e) {
 			logger.warn(e.getMessage());
 		}
@@ -59,14 +58,11 @@ public class LevelRepository extends JdbcDaoSupport {
 	/**
 	 * repository method to find searchkeywords by libraryid and categoryid
 	 */
-	public List<SearchKeyword> findSearchKeywords(String authenticationString,
-			String libraryId, String categoryId) {
+	public List<SearchKeyword> findSearchKeywords(String libraryId) {
 		List<SearchKeyword> searchKeywords = null;
 		try {
-			searchKeywords = getJdbcTemplate()
-					.query(GETSEARCHKEYWORDS_SQL,
-							new Object[] { authenticationString, libraryId,
-									categoryId }, new SearchKeywordRowMapper());
+			searchKeywords = getJdbcTemplate().query(GETSEARCHKEYWORDS_SQL,
+					new Object[] { libraryId }, new SearchKeywordRowMapper());
 		} catch (DataAccessException e) {
 			logger.warn(e.getMessage());
 		}
@@ -76,15 +72,14 @@ public class LevelRepository extends JdbcDaoSupport {
 	/**
 	 * repository method to find specifiedlevel by libraryid and categoryid
 	 */
-	public SpecifiedLevel findSpecifiedLevel(String authenticationString,
-			String libraryId, String categoryId) {
+	public SpecifiedLevel findSpecifiedLevel(String username, String libraryId,
+			String categoryId) {
 		SpecifiedLevel specifiedLevel = null;
 		try {
-			specifiedLevel = getJdbcTemplate()
-					.queryForObject(
-							GETSPECIFIEDLEVEL_SQL,
-							new Object[] { authenticationString, libraryId,
-									categoryId }, new SpecifiedLevelRowMapper());
+			specifiedLevel = getJdbcTemplate().queryForObject(
+					GETSPECIFIEDLEVEL_SQL,
+					new Object[] { username, libraryId, categoryId },
+					new SpecifiedLevelRowMapper());
 		} catch (DataAccessException e) {
 			logger.warn(e.getMessage());
 		}

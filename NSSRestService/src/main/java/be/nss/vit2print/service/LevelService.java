@@ -34,6 +34,11 @@ public class LevelService {
 	public LevelData getLevelData(GetLevelsInputDTO getLevelsInputDTO)
 			throws JsonParseException, JsonMappingException, IOException {
 
+		// String username = ((User) SecurityContextHolder.getContext()
+		// .getAuthentication().getPrincipal()).getUsername();
+
+		String username = getLevelsInputDTO.getUsername();
+
 		String[] parsedLibraryId = parseLibraryId(getLevelsInputDTO
 				.getLibraryId());
 		String libraryId = parsedLibraryId != null ? parsedLibraryId[0]
@@ -41,18 +46,17 @@ public class LevelService {
 		String categoryId = parsedLibraryId != null ? parsedLibraryId[1]
 				: DEFAULT_CATEGORY_ID;
 
-		List<Level> levels = levelRepository.findLevels(
-				getLevelsInputDTO.getAuthenticationString(), libraryId,
+		List<Level> levels = levelRepository.findLevels(username, libraryId,
 				categoryId);
 
-		List<SearchKeyword> searchKeywords = levelRepository
-				.findSearchKeywords(
-						getLevelsInputDTO.getAuthenticationString(), libraryId,
-						categoryId);
+		List<SearchKeyword> searchKeywords = null;
+
+		if (DEFAULT_CATEGORY_ID.equals(categoryId)) {
+			searchKeywords = levelRepository.findSearchKeywords(libraryId);
+		}
 
 		SpecifiedLevel specifiedLevel = levelRepository.findSpecifiedLevel(
-				getLevelsInputDTO.getAuthenticationString(), libraryId,
-				categoryId);
+				username, libraryId, categoryId);
 		specifiedLevel.setSearchKeywords(searchKeywords);
 
 		LevelData levelData = new LevelData();

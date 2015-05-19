@@ -10,19 +10,21 @@ import be.nss.vit2print.model.LevelAction;
 
 public class LevelRowMapper implements RowMapper<Level> {
 
+	private static final String DEFAULT_TYPE = "CATEGORY";
+
 	@Override
 	public Level mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 		Level level = new Level();
-		level.setAssestCount(rs.getInt("assetCount"));
+		level.setAssestCount(rs.getInt("cntAsset"));
 		level.setHasChildren(rs.getString("hasChildren"));
 		level.setId(rs.getString("id"));
 		level.setIdPath(rs.getString("idPath"));
 		level.setName(rs.getString("name"));
-		level.setNamePath(rs.getString("namePath"));
+		level.setNamePath(rs.getString("pathName"));
 		level.setParentId(rs.getInt("parentId"));
 		level.setScope(rs.getString("scope"));
-		level.setType(rs.getString("type"));
+		level.setType(DEFAULT_TYPE);
 
 		LevelAction levelAction = new LevelAction();
 		levelAction.setAddSubLevel(rs.getString("addSubLevel"));

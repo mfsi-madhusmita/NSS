@@ -10,6 +10,9 @@ import be.nss.vit2print.model.SpecifiedLevel;
 
 public class SpecifiedLevelRowMapper implements RowMapper<SpecifiedLevel> {
 
+	private static final String yFlag="Y";
+	private static final String nFlag="N";
+	
 	@Override
 	public SpecifiedLevel mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -25,15 +28,15 @@ public class SpecifiedLevelRowMapper implements RowMapper<SpecifiedLevel> {
 		specifiedLevel.setType(rs.getString("type"));
 
 		LevelAction levelAction = new LevelAction();
-		levelAction.setAddSubLevel(rs.getString("addSubLevel"));
-		levelAction.setApproveAsset(rs.getString("approveAsset"));
-		levelAction.setCopyAsset(rs.getString("copyAsset"));
-		levelAction.setDeleteLevel(rs.getString("deleteLevel"));
-		levelAction.setDisapproveAsset(rs.getString("disapproveAsset"));
-		levelAction.setEditLevel(rs.getString("editLevel"));
-		levelAction.setMoveAsset(rs.getString("moveAsset"));
 		levelAction.setSearchDoubles(rs.getString("searchDoubles"));
-		levelAction.setUploadAsset(rs.getString("uploadAsset"));
+		levelAction.setAddSubLevel(rs.getString("addSubLevel").equals("1")?yFlag:nFlag);
+		levelAction.setApproveAsset(rs.getString("approveAsset").equals("1")?yFlag:nFlag);
+		levelAction.setCopyAsset(rs.getString("copyAsset").equals("1")?yFlag:nFlag);
+		levelAction.setDeleteLevel(rs.getString("deleteLevel").equals("1")?yFlag:nFlag);
+		levelAction.setDisapproveAsset(rs.getString("disapproveAsset").equals("1")?yFlag:nFlag);
+		levelAction.setEditLevel(rs.getString("editLevel").equals("1")?yFlag:nFlag);
+		levelAction.setMoveAsset(rs.getString("moveAsset").equals("1")?yFlag:nFlag);
+		levelAction.setUploadAsset(rs.getString("uploadAsset").equals("1")?yFlag:nFlag);
 
 		specifiedLevel.setLevelAction(levelAction);
 

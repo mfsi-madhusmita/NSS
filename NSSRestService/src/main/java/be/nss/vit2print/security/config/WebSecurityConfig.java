@@ -1,4 +1,4 @@
-package be.nss.vit2print.security;
+package be.nss.vit2print.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import be.nss.vit2print.security.ApplicationAuthenticationFailureHandler;
+import be.nss.vit2print.security.ApplicationAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,13 +33,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			throws Exception {
 		auth.inMemoryAuthentication().withUser("nishant").password("123456")
 				.roles("ADMIN");
-		auth.inMemoryAuthentication().withUser("madhusmita").password("123456")
-				.roles("ADMIN");
+		auth.inMemoryAuthentication().withUser("systemadmin")
+				.password("123456").roles("ADMIN");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/admin/**")
+		http.authorizeRequests().antMatchers("/**")
 				.access("hasRole('ROLE_ADMIN')");
 		http.csrf().disable();
 		http.exceptionHandling().authenticationEntryPoint(
