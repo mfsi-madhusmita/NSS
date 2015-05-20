@@ -1,0 +1,394 @@
+Sample REST urls and their JSON output formats:
+————————————————————————
+1. when libraryId=3_5
+
+http://localhost:8080/NSS/getLevels?username=systemadmin&libraryId=3_5
+Output won't include searchkeywords
+
+sample output at http://www.jsoneditoronline.org/?id=0427be52f76eb17060f042db9a37629f
+
+**************************
+{
+  "levels": [
+    {
+      "id": "3_6",
+      "namePath": "My Images > Test Category For Lage Category Name Length",
+      "parentId": 3,
+      "hasChildren": "N",
+      "scope": "PRIVATE",
+      "name": "Test Category For Lage Category Name Length",
+      "idPath": "0y5y6y",
+      "assetCount": 0,
+      "type": "CATEGORY",
+      "actions": {
+        "searchDoubles": "NOT ALLOWED",
+        "approveAsset": "1",
+        "moveAsset": "1",
+        "editLevel": "1",
+        "uploadAsset": "1",
+        "addSubLevel": "1",
+        "copyAsset": "1",
+        "disapproveAsset": "1",
+        "deleteLevel": "1"
+      }
+    },
+    {
+      "id": "3_7",
+      "namePath": "My Images > 25HQ62FullFamily_Brochure",
+      "parentId": 3,
+      "hasChildren": "N",
+      "scope": "PRIVATE",
+      "name": "25HQ62FullFamily_Brochure",
+      "idPath": "0y5y7y",
+      "assetCount": 0,
+      "type": "CATEGORY",
+      "actions": {
+        "searchDoubles": "NOT ALLOWED",
+        "approveAsset": "1",
+        "moveAsset": "1",
+        "editLevel": "1",
+        "uploadAsset": "1",
+        "addSubLevel": "1",
+        "copyAsset": "1",
+        "disapproveAsset": "1",
+        "deleteLevel": "1"
+      }
+    },
+    {
+      "id": "3_8",
+      "namePath": "My Images > 25HO52 FullFamily_Brochure",
+      "parentId": 3,
+      "hasChildren": "N",
+      "scope": "PRIVATE",
+      "name": "25HO52 FullFamily_Brochure",
+      "idPath": "0y5y8y",
+      "assetCount": 0,
+      "type": "CATEGORY",
+      "actions": {
+        "searchDoubles": "NOT ALLOWED",
+        "approveAsset": "1",
+        "moveAsset": "1",
+        "editLevel": "1",
+        "uploadAsset": "1",
+        "addSubLevel": "1",
+        "copyAsset": "1",
+        "disapproveAsset": "1",
+        "deleteLevel": "1"
+      }
+    }
+  ],
+  "specifiedLevel": {
+    "id": 3,
+    "namePath": "My Images",
+    "hasCollections": "N",
+    "hasChildren": "Y",
+    "scope": "PRIVATE",
+    "name": "My Images",
+    "idPath": "0y2y",
+    "assetCount": 199,
+    "type": "CATEGORY",
+    "actions": {
+      "searchDoubles": "NOT ALLOWED",
+      "approveAsset": "Y",
+      "moveAsset": "Y",
+      "editLevel": "Y",
+      "uploadAsset": "Y",
+      "addSubLevel": "Y",
+      "copyAsset": "Y",
+      "disapproveAsset": "Y",
+      "deleteLevel": "Y"
+    }
+  }
+}
+**************************
+
+2. when libraryId=3
+
+Output will include multiple searchkeyword
+
+http://localhost:8080/NSS/getLevels?username=systemadmin&libraryId=3
+
+sample output at http://www.jsoneditoronline.org/?id=0427be52f76eb17060f042db9a3a12fc
+
+
+**************************
+{
+  "levels": [
+    {
+      "id": "3_2",
+      "namePath": "My Images > Flowers",
+      "parentId": 3,
+      "hasChildren": "Y",
+      "scope": "PRIVATE",
+      "name": "Flowers",
+      "idPath": "0y2y",
+      "assetCount": 31,
+      "type": "CATEGORY",
+      "actions": {
+        "searchDoubles": "NOT ALLOWED",
+        "approveAsset": "1",
+        "moveAsset": "1",
+        "editLevel": "0",
+        "uploadAsset": "1",
+        "addSubLevel": "1",
+        "copyAsset": "1",
+        "disapproveAsset": "1",
+        "deleteLevel": "0"
+      }
+    },
+    {
+      "id": "3_4",
+      "namePath": "My Images > 855",
+      "parentId": 3,
+      "hasChildren": "Y",
+      "scope": "PRIVATE",
+      "name": "855",
+      "idPath": "0y4y",
+      "assetCount": 6,
+      "type": "CATEGORY",
+      "actions": {
+        "searchDoubles": "NOT ALLOWED",
+        "approveAsset": "1",
+        "moveAsset": "1",
+        "editLevel": "0",
+        "uploadAsset": "1",
+        "addSubLevel": "1",
+        "copyAsset": "1",
+        "disapproveAsset": "1",
+        "deleteLevel": "0"
+      }
+    },
+    {
+      "id": "3_5",
+      "namePath": "My Images > Test",
+      "parentId": 3,
+      "hasChildren": "N",
+      "scope": "PRIVATE",
+      "name": "Test",
+      "idPath": "0y5y",
+      "assetCount": 0,
+      "type": "CATEGORY",
+      "actions": {
+        "searchDoubles": "NOT ALLOWED",
+        "approveAsset": "1",
+        "moveAsset": "1",
+        "editLevel": "0",
+        "uploadAsset": "1",
+        "addSubLevel": "1",
+        "copyAsset": "1",
+        "disapproveAsset": "1",
+        "deleteLevel": "0"
+      }
+    }
+  ],
+  "specifiedLevel": {
+    "id": 3,
+    "namePath": "My Images",
+    "hasCollections": "N",
+    "hasChildren": "Y",
+    "scope": "PRIVATE",
+    "searchKeywords": [
+      {
+        "id": 1,
+        "name": "assetid",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 15,
+        "name": "clippingpath",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 13,
+        "name": "colordepth",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 12,
+        "name": "colormodel",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 6,
+        "name": "creationtime",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 10,
+        "name": "dimensions",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 3,
+        "name": "filetype",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 14,
+        "name": "iccprofile",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 5,
+        "name": "importtime",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 7,
+        "name": "modificationtime",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 2,
+        "name": "name",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 9,
+        "name": "pages",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 11,
+        "name": "resolution",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 4,
+        "name": "size",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 8,
+        "name": "spreads",
+        "group": "TECHNICAL"
+      },
+      {
+        "id": 17,
+        "name": "CopyrightNotice",
+        "group": "IPTC"
+      },
+      {
+        "id": 18,
+        "name": "Byline",
+        "group": "IPTC"
+      },
+      {
+        "id": 19,
+        "name": "ImageType",
+        "group": "IPTC"
+      },
+      {
+        "id": 16,
+        "name": "ImageOrientation",
+        "group": "IPTC"
+      },
+      {
+        "id": 24,
+        "name": "ObjectName",
+        "group": "IPTC"
+      },
+      {
+        "id": 20,
+        "name": "DigitalCreationDate",
+        "group": "IPTC"
+      },
+      {
+        "id": 82,
+        "name": "Credit",
+        "group": "IPTC"
+      },
+      {
+        "id": 22,
+        "name": "TimeCreated",
+        "group": "IPTC"
+      },
+      {
+        "id": 83,
+        "name": "Country/PrimaryLocationName",
+        "group": "IPTC"
+      },
+      {
+        "id": 21,
+        "name": "DateCreated",
+        "group": "IPTC"
+      },
+      {
+        "id": 23,
+        "name": "DigitalCreationTime",
+        "group": "IPTC"
+      },
+      {
+        "id": 84,
+        "name": "Urgency",
+        "group": "IPTC"
+      },
+      {
+        "id": 85,
+        "name": "BylineTitle",
+        "group": "IPTC"
+      },
+      {
+        "id": 86,
+        "name": "Source",
+        "group": "IPTC"
+      },
+      {
+        "id": 87,
+        "name": "Category",
+        "group": "IPTC"
+      },
+      {
+        "id": 88,
+        "name": "Headline",
+        "group": "IPTC"
+      },
+      {
+        "id": 89,
+        "name": "SupplementalCategory",
+        "group": "IPTC"
+      },
+      {
+        "id": 90,
+        "name": "Keywords",
+        "group": "IPTC"
+      },
+      {
+        "id": 91,
+        "name": "Writer/Editor",
+        "group": "IPTC"
+      },
+      {
+        "id": 81,
+        "name": "Caption/Abstract",
+        "group": "IPTC"
+      },
+      {
+        "id": 92,
+        "name": "Province/State",
+        "group": "IPTC"
+      },
+      {
+        "id": 93,
+        "name": "Country/PrimaryLocationCode",
+        "group": "IPTC"
+      }
+    ],
+    "name": "My Images",
+    "idPath": "0y2y",
+    "assetCount": 199,
+    "type": "LIBRARY",
+    "actions": {
+      "searchDoubles": "NOT ALLOWED",
+      "approveAsset": "Y",
+      "moveAsset": "Y",
+      "editLevel": "N",
+      "uploadAsset": "Y",
+      "addSubLevel": "Y",
+      "copyAsset": "Y",
+      "disapproveAsset": "Y",
+      "deleteLevel": "N"
+    }
+  }
+}
+**************************
