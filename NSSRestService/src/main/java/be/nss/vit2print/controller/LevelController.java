@@ -32,9 +32,7 @@ public class LevelController {
 
 	/**
 	 * HTTP GET call to retrieve levels sample url is
-	 * http://localhost:8080/NSS/getLevels
-	 * ?authenticationString=abcdef&libraryId=3_5&options={"countLevelAssets":
-	 * true,"enablePrivateLibrary" : false}
+	 * http://localhost:8080/NSS/getLevels?username=systemadmin&libraryId=3_5
 	 */
 	@RequestMapping(value = "/getLevels", method = RequestMethod.GET)
 	public LevelData getLevels(@Valid GetLevelsInputDTO getLevelsInputDTO)
