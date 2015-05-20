@@ -1,16 +1,22 @@
 package be.nss.vit2print.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import be.nss.vit2print.security.ApplicationAuthenticationFailureHandler;
+import be.nss.vit2print.security.ApplicationAuthenticationFilter;
 import be.nss.vit2print.security.ApplicationAuthenticationSuccessHandler;
+import be.nss.vit2print.security.RemoveRolePrefix;
 
 @Configuration
 @EnableWebSecurity
@@ -29,24 +35,62 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private LogoutSuccessHandler logoutSuccessHandler;
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth)
-			throws Exception {
-		auth.inMemoryAuthentication().withUser("nishant").password("123456")
-				.roles("ADMIN");
-		auth.inMemoryAuthentication().withUser("systemadmin")
-				.password("123456").roles("ADMIN");
-	}
+	private AccessDeniedHandler accessDeniedHandler;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.authorizeRequests().antMatchers("/**")
-				.access("hasRole('ROLE_ADMIN')");
+				.access("hasRole('SUPERUSER')").and().exceptionHandling()
+				.authenticationEntryPoint(authenticationEntryPoint)
+				.accessDeniedHandler(accessDeniedHandler).and().logout()
+				.logoutSuccessHandler(logoutSuccessHandler);
+
 		http.csrf().disable();
-		http.exceptionHandling().authenticationEntryPoint(
-				authenticationEntryPoint);
-		http.formLogin().failureHandler(authenticationFailureHandler);
-		http.formLogin().successHandler(authenticationSuccessHandler);
-		http.logout().logoutSuccessHandler(logoutSuccessHandler);
+
+		http.addFilterBefore(getApplicationAuthenticationFilter(),
+				UsernamePasswordAuthenticationFilter.class);
+
+		http.sessionManagement().sessionFixation().migrateSession();
+
 	}
 
+	@Override
+	public void configure(AuthenticationManagerBuilder authManagerBuilder)
+			throws Exception {
+		authManagerBuilder.inMemoryAuthentication().withUser("nishant")
+				.password("123456").roles("SUPERUSER");
+		authManagerBuilder.inMemoryAuthentication().withUser("systemadmin")
+				.password("123456").roles("SUPERUSER");
+	}
+
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
+	}
+
+	/**
+	 * Build a custom authentication filter, registers default
+	 * authenticationManager, custom authenticationSuccessHandler and
+	 * authenticationFailureHandler
+	 */
+	@Bean
+	public ApplicationAuthenticationFilter getApplicationAuthenticationFilter()
+			throws Exception {
+		ApplicationAuthenticationFilter authenticationFilter = new ApplicationAuthenticationFilter();
+		authenticationFilter.setAuthenticationManager(authenticationManager());
+		authenticationFilter
+				.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+		authenticationFilter
+				.setAuthenticationFailureHandler(authenticationFailureHandler);
+		return authenticationFilter;
+	}
+
+	/**
+	 * To Remove ROLE_ prefix
+	 */
+	public RemoveRolePrefix getRemoveRolePrefix() {
+		return new RemoveRolePrefix();
+	}
 }
