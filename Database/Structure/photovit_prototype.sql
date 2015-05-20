@@ -1,0 +1,1 @@
+CREATE DATABASE  IF NOT EXISTS `photovit_prototype` /*!40100 DEFAULT CHARACTER SET utf8 */;
