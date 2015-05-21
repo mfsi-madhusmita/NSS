@@ -1,0 +1,28 @@
+Web Container set-up
+=====================
+Apache Tomcat 7:
+Download core distribution from below mentioned url:
+https://tomcat.apache.org/download-70.cgi
+
+version used: apache-tomcat-7.0.61
+
+References:
+https://shellzero.wordpress.com/2012/03/18/installing-tomcat-7-0-x-on-mac-osx/
+
+Custom Changes:
+Need to add few lines to the conf/tomcat-users.xml
+
+
+//
+	<role rolename="admin-gui"/>
+	<role rolename="manager-gui"/>
+	<user username="root" password="server" roles="admin-gui, manager-gui" />
+//	
+
+This above lines should be inside tag <tomcat-users>-------</tomcat-users>
+
+
+Start the server using below mentioned command:
+> Library/Tomcat/apache-tomcat-7.0.61/bin$ ./startup.sh
+> Library/Tomcat/apache-tomcat-7.0.61/bin$ ./shutdown.sh
+***********************************
