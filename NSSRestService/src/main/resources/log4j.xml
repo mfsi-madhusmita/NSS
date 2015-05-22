@@ -9,7 +9,15 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
-
+	
+	<appender name="errfile" class="org.apache.log4j.FileAppender">
+        <param name="threshold" value="warn" />
+		<param name="file" value="${catalina.home}/logs/LogFilename.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
 	<!-- Application Loggers -->
 	<logger name="be.nss.vit2print">
 		<level value="info" />
@@ -40,6 +48,7 @@
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />
+		<appender-ref ref="errfile" />
 	</root>
 
 </log4j:configuration>

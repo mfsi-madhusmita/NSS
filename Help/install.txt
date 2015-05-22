@@ -4,10 +4,15 @@ Apache Tomcat 7:
 Download core distribution from below mentioned url:
 https://tomcat.apache.org/download-70.cgi
 
-version used: apache-tomcat-7.0.61
-
-References:
-https://shellzero.wordpress.com/2012/03/18/installing-tomcat-7-0-x-on-mac-osx/
+===============
+STEPS:
+dev1:Downloads root# curl -O http://www.trieuvan.com/apache/tomcat/tomcat-7/v7.0.62/bin/apache-tomcat-7.0.62.tar.gz
+dev1:Downloads root# tar -xvzf apache-tomcat-7.0.62.tar.gz 
+dev1:Library root# mkdir Tomcat7
+dev1:Library root# chmod 644 Tomcat7
+dev1:Tomcat7 root# cd apache-tomcat-7.0.62/
+dev1:apache-tomcat-7.0.62 root# cd conf/
+dev1:conf root# sudo vi tomcat-users.xml 
 
 Custom Changes:
 Need to add few lines to the conf/tomcat-users.xml
@@ -20,6 +25,20 @@ Need to add few lines to the conf/tomcat-users.xml
 //	
 
 This above lines should be inside tag <tomcat-users>-------</tomcat-users>
+
+dev1:conf root# cd /Library/Tomcat7/apache-tomcat-7.0.62/bin/  
+dev1:bin root# ./startup.sh 
+
+Now open using 
+http://<IP>:8080
+
+===============
+version used: apache-tomcat-7.0.61
+
+References:
+https://shellzero.wordpress.com/2012/03/18/installing-tomcat-7-0-x-on-mac-osx/
+
+
 
 
 Start the server using below mentioned command:
