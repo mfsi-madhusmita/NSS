@@ -7,4 +7,5 @@ public interface ExceptionMessages {
 	String INVALID_OPTIONS = "Invalid options";
 	String INVALID_USERNAME = "Username is not valid";
 	String INVALID_PASSWORD = "Password is not valid";
+	String INTERNAL_SERVER_ERROR = "Internal server error";
 }
