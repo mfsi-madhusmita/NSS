@@ -64,7 +64,10 @@ public class LevelService {
 
 		SpecifiedLevel specifiedLevel = levelRepository.findSpecifiedLevel(
 				username, libraryId, categoryId);
-		specifiedLevel.setSearchKeywords(searchKeywords);
+
+		if (specifiedLevel != null) {
+			specifiedLevel.setSearchKeywords(searchKeywords);
+		}
 
 		LevelData levelData = new LevelData();
 		levelData.setLevels(levels);
