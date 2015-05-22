@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -37,43 +39,48 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
 
+	@Autowired
+	private UserDetailsService userService;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/**")
-				.access("hasRole('SUPERUSER')").and().exceptionHandling()
-				.authenticationEntryPoint(authenticationEntryPoint)
-				.accessDeniedHandler(accessDeniedHandler).and().logout()
-				.logoutSuccessHandler(logoutSuccessHandler);
+		http.authorizeRequests().anyRequest().authenticated().and()
+				.exceptionHandling()
+				.authenticationEntryPoint(authenticationEntryPoint).and()
+				.logout().logoutSuccessHandler(logoutSuccessHandler).and()
+				.csrf().disable();
 
-		http.csrf().disable();
+		// http.authorizeRequests().antMatchers("/**").hasAuthority("SUPERUSER")
+		// .and().exceptionHandling()
+		// .authenticationEntryPoint(authenticationEntryPoint).and()
+		// .logout().logoutSuccessHandler(logoutSuccessHandler).and()
+		// .csrf().disable();
 
 		http.addFilterBefore(getApplicationAuthenticationFilter(),
 				UsernamePasswordAuthenticationFilter.class);
-
-		http.sessionManagement().sessionFixation().migrateSession();
-
 	}
 
-	@Override
-	public void configure(AuthenticationManagerBuilder authManagerBuilder)
+	/**
+	 * register custom user detail service and password encoder into
+	 * AuthenticationManagerBuilder
+	 */
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth)
 			throws Exception {
-		authManagerBuilder.inMemoryAuthentication().withUser("nishant")
-				.password("123456").roles("SUPERUSER");
-		authManagerBuilder.inMemoryAuthentication().withUser("systemadmin")
-				.password("123456").roles("SUPERUSER");
+		auth.userDetailsService(userService).passwordEncoder(
+				getPasswordEncoder());
 	}
 
 	@Bean
 	@Override
-	protected AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 	/**
-	 * Build a custom authentication filter, registers default
-	 * authenticationManager, custom authenticationSuccessHandler and
-	 * authenticationFailureHandler
+	 * Build a custom authentication filter, registers authenticationManager,
+	 * custom authenticationSuccessHandler and authenticationFailureHandler
 	 */
 	@Bean
 	public ApplicationAuthenticationFilter getApplicationAuthenticationFilter()
@@ -88,9 +95,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * To Remove ROLE_ prefix
+	 * To Remove ROLE_ prefix from user roles
 	 */
 	public RemoveRolePrefix getRemoveRolePrefix() {
 		return new RemoveRolePrefix();
+	}
+
+	/**
+	 * Password Encoder
+	 */
+	@Bean
+	public Md5PasswordEncoder getPasswordEncoder() {
+		return new Md5PasswordEncoder();
 	}
 }

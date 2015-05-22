@@ -15,22 +15,36 @@ import be.nss.vit2print.dto.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Custom AuthenticationFilter to get login credentials input as json format
+ * Custom AuthenticationFilter to get login credentials input in JSON format
  */
 public class ApplicationAuthenticationFilter extends
 		AbstractAuthenticationProcessingFilter {
 
+	private static final String loginContentType = "application/json";
+	private static final String loginHttpMethod = "POST";
+
 	public ApplicationAuthenticationFilter() {
-		super(new AntPathRequestMatcher("/login", "POST"));
+		super(new AntPathRequestMatcher("/login", loginHttpMethod));
 	}
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,
 			HttpServletResponse response) throws AuthenticationException {
-		if (!request.getMethod().equals("POST")) {
+		/*
+		 * HTTP Method for login should be POST
+		 */
+		if (!loginHttpMethod.equals(request.getMethod())) {
 			throw new AuthenticationServiceException(
 					"Authentication method not supported: "
 							+ request.getMethod());
+		}
+
+		/*
+		 * Content type for login should be JSON
+		 */
+		if (!loginContentType.equals(request.getContentType())) {
+			throw new AuthenticationServiceException("Content Type "
+					+ request.getContentType() + " Not Supported");
 		}
 
 		LoginRequest loginRequest = getLoginRequest(request);
@@ -54,5 +68,4 @@ public class ApplicationAuthenticationFilter extends
 		}
 		return loginRequest;
 	}
-
 }
