@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class GetLevelsInputDTO {
 
-	private static final String LIBRARY_ID_PATTERN = "[0-9]*[_]*[0-9]+$";
+	private static final String LIBRARY_ID_PATTERN = "^[0-9]*[_]*[0-9]+$";
 
 	@NotBlank(message = INVALID_USERNAME)
 	private String username;
