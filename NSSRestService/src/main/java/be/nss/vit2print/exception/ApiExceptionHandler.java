@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import be.nss.vit2print.dto.ErrorDTO;
+import static be.nss.vit2print.exception.ExceptionMessages.INTERNAL_SERVER_ERROR;
 
 /**
  * Application Global Exception Handler
@@ -20,12 +21,17 @@ public class ApiExceptionHandler {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
-	 * Exception handler for any Exception
+	 * Exception handler for any Exception or NullPointerException
 	 */
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorDTO> handleException(Exception e) {
-		logger.error(e.getMessage(), e);
-		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),
+		String errorMessage = e.getMessage();
+		if (e instanceof NullPointerException) {
+			errorMessage = errorMessage != null ? errorMessage
+					: INTERNAL_SERVER_ERROR;
+		}
+		logger.error(errorMessage, e);
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(errorMessage),
 				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
