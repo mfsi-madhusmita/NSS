@@ -1,16 +1,18 @@
 package be.nss.vit2print.exception;
 
+import static be.nss.vit2print.exception.ExceptionMessages.INTERNAL_SERVER_ERROR;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import be.nss.vit2print.dto.ErrorDTO;
-import static be.nss.vit2print.exception.ExceptionMessages.INTERNAL_SERVER_ERROR;
 
 /**
  * Application Global Exception Handler
@@ -39,7 +41,7 @@ public class ApiExceptionHandler {
 	 * Exception handler for Data validation exception
 	 */
 	@ExceptionHandler({ MethodArgumentNotValidException.class,
-			BindException.class })
+			BindException.class, HttpMessageNotReadableException.class })
 	public ResponseEntity<ErrorDTO> handleDataValidationException(Exception e) {
 		String errorMessage = null;
 
@@ -51,9 +53,12 @@ public class ApiExceptionHandler {
 			MethodArgumentNotValidException me = (MethodArgumentNotValidException) e;
 			errorMessage = me.getBindingResult().getFieldError()
 					.getDefaultMessage();
+		} else if (e instanceof HttpMessageNotReadableException) {
+			HttpMessageNotReadableException je = (HttpMessageNotReadableException) e;
+			errorMessage = je.getMostSpecificCause().getMessage();
 		}
 
-		logger.error(errorMessage);
+		logger.error(errorMessage, e);
 
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(errorMessage),
 				HttpStatus.BAD_REQUEST);
