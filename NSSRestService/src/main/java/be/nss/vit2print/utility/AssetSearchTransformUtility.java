@@ -84,18 +84,22 @@ public class AssetSearchTransformUtility {
 		// asset_id in Asset object is different as asset_id in Asset object
 		// contains libraryId+_ before asset_id like 3_152
 		// transform asset_id in each keywordgroup by left padding libraryid+_
-		for (KeywordGroup keywordGroup : normaliseKeywordsByKeywordGroup) {
-			appendLibraryIdToKeywordGroupAssetId(keywordGroup, libraryId);
-		}
+		if (normaliseKeywordsByKeywordGroup != null) {
+			for (KeywordGroup keywordGroup : normaliseKeywordsByKeywordGroup) {
+				appendLibraryIdToKeywordGroupAssetId(keywordGroup, libraryId);
+			}
 
-		// find which keywordgroup relates to which Asset object with the help
-		// of asset_id
-		for (Asset asset : assets) {
-			if (normaliseKeywordsByKeywordGroup != null) {
-				for (KeywordGroup keywordGroup : normaliseKeywordsByKeywordGroup) {
-					if (asset.getAssetId().equals(keywordGroup.getAssetId())) {
-						asset.setKeywordGroups(keywordGroup);
-						break;
+			// find which keywordgroup relates to which Asset object with the
+			// help
+			// of asset_id
+			for (Asset asset : assets) {
+				if (normaliseKeywordsByKeywordGroup != null) {
+					for (KeywordGroup keywordGroup : normaliseKeywordsByKeywordGroup) {
+						if (asset.getAssetId()
+								.equals(keywordGroup.getAssetId())) {
+							asset.setKeywordGroups(keywordGroup);
+							break;
+						}
 					}
 				}
 			}

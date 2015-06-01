@@ -16,4 +16,6 @@ public interface ExceptionMessages {
 	String INVALID_SEARCH_VALUE = "Invalid search value";
 	String INVALID_SORT_ORDER = "Invalid sort order";
 	String INVALID_RECURSE = "Invalid recurse";
+	String INVALID_ASSET_ID = "Invalid asset id";
+	String UNKNOWN_ASSET_ID = "Unknown asset id";
 }

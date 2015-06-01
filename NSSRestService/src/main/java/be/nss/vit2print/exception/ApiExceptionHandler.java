@@ -63,4 +63,13 @@ public class ApiExceptionHandler {
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(errorMessage),
 				HttpStatus.BAD_REQUEST);
 	}
+
+	/**
+	 * Exception handler for APIException
+	 */
+	@ExceptionHandler(APIException.class)
+	public ResponseEntity<ErrorDTO> handleDataValidationException(APIException e) {
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),
+				e.getHttpStatus());
+	}
 }

@@ -11,6 +11,8 @@ import be.nss.vit2print.model.AssetLevel;
 
 public class AssetRowMapper implements RowMapper<Asset> {
 
+	private static final String ASSET_THUMB_FILE_URL = "localhost:8080/NSS/photovit_action/Thumb?assetId=";
+
 	@Override
 	public Asset mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -41,7 +43,6 @@ public class AssetRowMapper implements RowMapper<Asset> {
 		asset.setAssetId(rs.getString("asset_id"));
 		asset.setName(rs.getString("name"));
 		asset.setApproval(rs.getString("approval"));
-		// asset.setThumbString(rs.getString("thumbstring"));
 		asset.setImportTime(rs.getString("importtime"));
 		asset.setFileType(rs.getString("filetype"));
 		asset.setBrowseAble(rs.getString("browseable"));
@@ -50,6 +51,18 @@ public class AssetRowMapper implements RowMapper<Asset> {
 		asset.setAssetAction(assetAction);
 		asset.setBasketAssetCount(rs.getInt("basketassetcount"));
 
+		prepareThumbStringData(asset);
+
 		return asset;
+	}
+
+	private void prepareThumbStringData(Asset asset) {
+		String assetId = asset.getAssetId();
+		StringBuilder thumbString = null;
+		if (assetId != null) {
+			thumbString = new StringBuilder(ASSET_THUMB_FILE_URL)
+					.append(assetId);
+		}
+		asset.setThumbString(thumbString.toString());
 	}
 }
