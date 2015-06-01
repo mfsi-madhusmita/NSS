@@ -29,6 +29,9 @@ public class KeywordGroup {
 	@JsonIgnore
 	private Keyword keyword;
 
+	@JsonIgnore
+	private String assetId;
+
 	public KeywordGroup() {
 		// Default constructor
 	}
@@ -46,14 +49,6 @@ public class KeywordGroup {
 
 	public void setUniqueId(long uniqueId) {
 		this.uniqueId = uniqueId;
-	}
-
-	public int getSort() {
-		return sortindex;
-	}
-
-	public void setSort(int sortindex) {
-		this.sortindex = sortindex;
 	}
 
 	public List<Keyword> getKeywords() {
@@ -94,5 +89,13 @@ public class KeywordGroup {
 
 	public void setKeyword(Keyword keyword) {
 		this.keyword = keyword;
+	}
+
+	public String getAssetId() {
+		return assetId;
+	}
+
+	public void setAssetId(String assetId) {
+		this.assetId = assetId;
 	}
 }

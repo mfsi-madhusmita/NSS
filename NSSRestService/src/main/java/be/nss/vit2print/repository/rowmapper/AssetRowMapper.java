@@ -15,9 +15,9 @@ public class AssetRowMapper implements RowMapper<Asset> {
 	public Asset mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 		AssetLevel assetLevel = new AssetLevel();
-		assetLevel.setFullId(rs.getString("full_id"));
-		assetLevel.setName(rs.getString("name"));
-		assetLevel.setParentsAsString(rs.getString("parentsAsString"));
+		assetLevel.setFullId(rs.getString("cat_full_id"));
+		assetLevel.setName(rs.getString("cat_name"));
+		assetLevel.setParentsAsString(rs.getString("parents"));
 
 		AssetAction assetAction = new AssetAction();
 		assetAction.setMail(rs.getString("mail"));
@@ -31,7 +31,7 @@ public class AssetRowMapper implements RowMapper<Asset> {
 		assetAction.setDownload(rs.getString("download"));
 		assetAction.setSimilarsearch(rs.getString("similarsearch"));
 		assetAction.setPrint(rs.getString("print"));
-		assetAction.setDelete(rs.getString("delete"));
+		assetAction.setDelete(rs.getString("remove"));
 		assetAction.setBasket(rs.getString("basket"));
 		assetAction.setViewinfo(rs.getString("viewinfo"));
 		assetAction.setMove(rs.getString("move"));
@@ -41,13 +41,14 @@ public class AssetRowMapper implements RowMapper<Asset> {
 		asset.setAssetId(rs.getString("asset_id"));
 		asset.setName(rs.getString("name"));
 		asset.setApproval(rs.getString("approval"));
-		asset.setThumbString(rs.getString("thumbstring"));
+		// asset.setThumbString(rs.getString("thumbstring"));
 		asset.setImportTime(rs.getString("importtime"));
 		asset.setFileType(rs.getString("filetype"));
 		asset.setBrowseAble(rs.getString("browseable"));
 		asset.setSize(rs.getLong("size"));
 		asset.setAssetLevel(assetLevel);
 		asset.setAssetAction(assetAction);
+		asset.setBasketAssetCount(rs.getInt("basketassetcount"));
 
 		return asset;
 	}
