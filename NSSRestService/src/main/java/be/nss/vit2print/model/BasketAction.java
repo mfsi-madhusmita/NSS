@@ -1,5 +1,6 @@
 package be.nss.vit2print.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -42,8 +43,43 @@ public class BasketAction {
 	@JsonProperty("copy")
 	private String copy;
 
+	@JsonIgnore
+	private String basketActionValue;
+
 	public BasketAction() {
 		// Default Constructor
+	}
+
+	public BasketAction(String mail, String approve, String export,
+			String disapprove, String delete, String excel, String download,
+			String upload, String print, String move, String copy) {
+		super();
+		this.mail = mail;
+		this.approve = approve;
+		this.export = export;
+		this.disapprove = disapprove;
+		this.delete = delete;
+		this.excel = excel;
+		this.download = download;
+		this.upload = upload;
+		this.print = print;
+		this.move = move;
+		this.copy = copy;
+	}
+
+	public BasketAction(String basketActionValue) {
+		super();
+		this.mail = basketActionValue;
+		this.approve = basketActionValue;
+		this.export = basketActionValue;
+		this.disapprove = basketActionValue;
+		this.delete = basketActionValue;
+		this.excel = basketActionValue;
+		this.download = basketActionValue;
+		this.upload = basketActionValue;
+		this.print = basketActionValue;
+		this.move = basketActionValue;
+		this.copy = basketActionValue;
 	}
 
 	public String getMail() {
@@ -132,5 +168,13 @@ public class BasketAction {
 
 	public void setCopy(String copy) {
 		this.copy = copy;
+	}
+
+	public String getBasketActionValue() {
+		return basketActionValue;
+	}
+
+	public void setBasketActionValue(String basketActionValue) {
+		this.basketActionValue = basketActionValue;
 	}
 }

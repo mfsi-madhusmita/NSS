@@ -12,20 +12,20 @@ public class KeywordGroupRowMapper implements RowMapper<KeywordGroup> {
 
 	@Override
 	public KeywordGroup mapRow(ResultSet rs, int rowNum) throws SQLException {
-		
-		Keyword keyword=new Keyword();
+
+		Keyword keyword = new Keyword();
 		keyword.setId(rs.getInt("id"));
-		keyword.setUniqueId(rs.getLong("uniqueid"));
-		keyword.setSortIndex(rs.getInt("sortindex"));
-		keyword.setTranslation(rs.getString("translation"));
+		keyword.setSortIndex(rs.getInt("sort_index"));
+		keyword.setTranslation(rs.getString("name"));
 		keyword.setName(rs.getString("name"));
 		keyword.setValue(rs.getString("value"));
 		keyword.setEditAble(rs.getString("editable"));
-		
-		KeywordGroup keywordGroup=new KeywordGroup();
-		keywordGroup.setKeywordGroupAsString(rs.getString("keywordGroupAsString"));
+
+		KeywordGroup keywordGroup = new KeywordGroup();
+		keywordGroup.setKeywordGroupAsString(rs.getString("keywordgroup"));
 		keywordGroup.setKeyword(keyword);
-		
-		return null;
+		keywordGroup.setAssetId(rs.getString("asset_id"));
+
+		return keywordGroup;
 	}
 }

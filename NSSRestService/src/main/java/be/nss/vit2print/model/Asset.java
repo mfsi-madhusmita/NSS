@@ -1,7 +1,6 @@
 package be.nss.vit2print.model;
 
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -42,8 +41,11 @@ public class Asset {
 	@JsonProperty("level")
 	private AssetLevel assetLevel;
 
-	@JsonProperty("keywordgroups")
-	private List<KeywordGroup> keywordGroups;
+	@JsonProperty("keywordgroup")
+	private KeywordGroup keywordGroup;
+
+	@JsonIgnore
+	private int basketAssetCount;
 
 	public Asset() {
 		// TODO Auto-generated constructor stub
@@ -129,11 +131,19 @@ public class Asset {
 		this.assetLevel = assetLevel;
 	}
 
-	public List<KeywordGroup> getKeywordGroups() {
-		return keywordGroups;
+	public KeywordGroup getKeywordGroup() {
+		return keywordGroup;
 	}
 
-	public void setKeywordGroups(List<KeywordGroup> keywordGroups) {
-		this.keywordGroups = keywordGroups;
+	public void setKeywordGroups(KeywordGroup keywordGroup) {
+		this.keywordGroup = keywordGroup;
+	}
+
+	public int getBasketAssetCount() {
+		return basketAssetCount;
+	}
+
+	public void setBasketAssetCount(int basketAssetCount) {
+		this.basketAssetCount = basketAssetCount;
 	}
 }

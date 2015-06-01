@@ -18,6 +18,10 @@ public class AssetSearchController {
 	@Autowired
 	private AssetSearchService assetSearchService;
 
+	/**
+	 * HTTP POST call to search asset data sample url is
+	 * http://localhost:8080/NSS/search/assets
+	 */
 	@RequestMapping(value = "/search/assets", method = RequestMethod.POST)
 	public AssetData searchAssetData(
 			@RequestBody @Valid AssetSearchDTO assetSearch) {

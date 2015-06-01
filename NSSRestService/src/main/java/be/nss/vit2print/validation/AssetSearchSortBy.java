@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum AssetSearchSortBy {
 
-	FILENAME, ACCESSED, IMPORTTIME;
+	filename, accessed, importtime;
 
 	public static List<String> sortByTypes() {
 		List<String> enumValues = new ArrayList<String>();
