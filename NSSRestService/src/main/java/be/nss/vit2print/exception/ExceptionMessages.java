@@ -7,4 +7,5 @@ public interface ExceptionMessages {
 	String INVALID_OPTIONS = "Invalid options";
 	String INVALID_USERNAME = "Username is not valid";
 	String INVALID_PASSWORD = "Password is not valid";
+	String INVALID_LOGIN_JSON = "Invalid JSON format of credentials, Expected format \n{\n\t\"username\":\"username\",\n\t\"password\":\"password\"\n} ";
 }

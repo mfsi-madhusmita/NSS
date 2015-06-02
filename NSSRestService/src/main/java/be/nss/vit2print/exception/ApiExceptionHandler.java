@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,10 +31,11 @@ public class ApiExceptionHandler {
 	}
 
 	/**
-	 * Exception handler for Data validation exception
+	 * Exception handler for Data validation exception and Invalid HTTP Method
+	 * means for BAD REQUEST
 	 */
 	@ExceptionHandler({ MethodArgumentNotValidException.class,
-			BindException.class })
+			BindException.class, HttpRequestMethodNotSupportedException.class })
 	public ResponseEntity<ErrorDTO> handleDataValidationException(Exception e) {
 		String errorMessage = null;
 
@@ -45,11 +47,23 @@ public class ApiExceptionHandler {
 			MethodArgumentNotValidException me = (MethodArgumentNotValidException) e;
 			errorMessage = me.getBindingResult().getFieldError()
 					.getDefaultMessage();
+		} else if (e instanceof HttpRequestMethodNotSupportedException) {
+			HttpRequestMethodNotSupportedException he = (HttpRequestMethodNotSupportedException) e;
+			errorMessage = he.getMessage();
 		}
 
 		logger.error(errorMessage);
 
 		return new ResponseEntity<ErrorDTO>(new ErrorDTO(errorMessage),
 				HttpStatus.BAD_REQUEST);
+	}
+
+	/**
+	 * Exception handler for APIException
+	 */
+	@ExceptionHandler(APIException.class)
+	public ResponseEntity<ErrorDTO> handleDataValidationException(APIException e) {
+		return new ResponseEntity<ErrorDTO>(new ErrorDTO(e.getMessage()),
+				e.getHttpStatus());
 	}
 }

@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
@@ -19,7 +19,11 @@ import be.nss.vit2print.security.ApplicationAuthenticationFailureHandler;
 import be.nss.vit2print.security.ApplicationAuthenticationFilter;
 import be.nss.vit2print.security.ApplicationAuthenticationSuccessHandler;
 import be.nss.vit2print.security.RemoveRolePrefix;
+import be.nss.vit2print.security.SecurityExceptionFilter;
 
+/**
+ * Application Security Configuration
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -37,10 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private LogoutSuccessHandler logoutSuccessHandler;
 
 	@Autowired
-	private AccessDeniedHandler accessDeniedHandler;
+	private UserDetailsService userService;
 
 	@Autowired
-	private UserDetailsService userService;
+	private SecurityExceptionFilter exceptionFilter;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -57,8 +61,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// .logout().logoutSuccessHandler(logoutSuccessHandler).and()
 		// .csrf().disable();
 
+		/*
+		 * register custom AuthenticationFilter before
+		 * UsernamePasswordAuthenticationFilter
+		 */
 		http.addFilterBefore(getApplicationAuthenticationFilter(),
 				UsernamePasswordAuthenticationFilter.class);
+
+		http.addFilterBefore(exceptionFilter, ChannelProcessingFilter.class);
 	}
 
 	/**

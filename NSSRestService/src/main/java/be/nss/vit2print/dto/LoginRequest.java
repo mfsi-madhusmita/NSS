@@ -3,9 +3,13 @@ package be.nss.vit2print.dto;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_PASSWORD;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_USERNAME;
 
+import java.io.Serializable;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-public class LoginRequest {
+public class LoginRequest implements Serializable {
+
+	private static final long serialVersionUID = 2193176517499548985L;
 
 	@NotBlank(message = INVALID_USERNAME)
 	private String username;
