@@ -1,7 +1,7 @@
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `photovit_prototype`.`sp_PhotoVit_GetAssets`$$
 CREATE 
-DEFINER=`root`@`%`
+/*DEFINER=`root`@`%`*/
 PROCEDURE  `photovit_prototype`.`sp_PhotoVit_GetAssets`(
     v_user_name VARCHAR(255), v_library_id INT(11), v_level_list_str TEXT, v_page INT(11),
     v_asset_per_page INT(11), v_is_recurse BOOL, v_sort_field VARCHAR(100), v_sort_order VARCHAR(25),
@@ -86,6 +86,32 @@ BEGIN
 		SET v_sort_logic = CONCAT(" ORDER BY " , v_sort_field , " " , v_sort_order);
 	END IF;
     
+	# Create temporary table to keep category ids required for fetch parents
+    SET @parent_category_list = CONCAT("CREATE TEMPORARY TABLE IF NOT EXISTS photovit.tmp  AS (SELECT category_id, " , 
+		" REPLACE(REPLACE(a.category, 'y', ','), '\",\"', '') AS ids, category, reference " ,
+		" FROM photovit.category_" , v_library_id , " a " ,
+		" WHERE " , v_asset_recurse_logic , ")");
+    
+    #SELECT @parent_category_list;
+    
+	-- -----------------------------------------------------
+	-- Execute the above query string
+	-- -----------------------------------------------------
+	PREPARE STMT FROM @parent_category_list;
+	EXECUTE STMT;
+  
+    -- -----------------------------------------------------
+	-- Deallocate prepared statement
+	-- -----------------------------------------------------
+	DEALLOCATE PREPARE STMT;    
+    
+	#SELECT * FROM photovit.tmp;
+    
+    call photovit_prototype.sp_PhotoVit_GetParentcategoryList(v_library_id);
+    #SELECT * FROM photovit.tmp;
+    #DROP TABLE IF EXISTs photovit.tmp;
+    
+    
     #SELECT v_sort_logic;
     
     SET @final_query = CONCAT("SELECT CONCAT(" , v_library_id , ", '_' , a.asset_id) AS asset_id, a.binary_name AS name, " ,
@@ -98,9 +124,7 @@ BEGIN
         " 'Y' AS zoom, " , 
         " 'Y' AS viewinfo, " ,
         "IF(cat.pcategory_id = 0, CONCAT(l.library_id, '+', l.reference), " ,
-        "(SELECT category_id AS parent_col FROM photovit.category_" , v_library_id ,
-		" WHERE category_id IN(REPLACE(QUOTE(cat.category), \"y\",\"','\")) AND category_id != cat.category_id)) AS parents," ,        
-        
+		" (SELECT tmp.category FROM photovit.tmp tmp WHERE tmp.category_id = cat.category_id)) AS parents," ,        
         " IF(IF(COUNT(uc.id) > 0, uc.mail, (IF(COUNT(ul.id) > 0, ul.mail, 'N'))) = 'Y', 'ENABLED', 'DISABLED') AS mail, " ,
         " IF(COUNT(uc.id) > 0, IF(uc.export_hotfolder != '' AND uc.export_hotfolder = 'Y', 'Y', 'N'), (IF(COUNT(ul.id) > 0, IF(ul.export_hotfolder != '' AND ul.export_hotfolder = 'Y', 'Y', 'N'), 'N'))) AS export, " , 
         " IF(COUNT(uc.id) > 0, IF(uc.approve != '' AND uc.approve = 'Y', 'Y', 'N'), (IF(COUNT(ul.id) > 0, IF(ul.approve != '' AND ul.approve = 'Y', 'Y', 'N'), 'N'))) AS approve, " , 
@@ -119,7 +143,7 @@ BEGIN
         " INNER JOIN photovit.library l ON l.library_id =  " , v_library_id ,
         " INNER JOIN photovit.category_" , v_library_id , " cat ON cat.category = a.category " ,
         " LEFT JOIN photovit.basket_asset ba ON ba.asset_id = a.asset_id " ,
-		" LEFT JOIN vit2print.user usr ON usr.user_id = ba.user_id " , 
+		" LEFT JOIN vit2print.user usr ON usr.user_id = l.user_id " , 
 		" LEFT JOIN photovit.library_keyword lk ON lk.library_id = l.library_id AND similar = 'Y'" ,
 		" LEFT JOIN photovit.lightbox_asset la ON la.asset_id = a.asset_id" ,
         " LEFT JOIN photovit.user_library ul ON ul.library_id = l.library_id " ,
@@ -132,9 +156,9 @@ BEGIN
 		" GROUP BY ba.asset_id " ,
             " " , v_sort_logic , " " , v_limit_logic);
         
-	SELECT @final_query;
+	#SELECT @final_query;
     
-     	-- -----------------------------------------------------
+	-- -----------------------------------------------------
 	-- Execute the above query string
 	-- -----------------------------------------------------
 	PREPARE STMT FROM @final_query;
@@ -144,6 +168,8 @@ BEGIN
 	-- Deallocate prepared statement
 	-- -----------------------------------------------------
 	DEALLOCATE PREPARE STMT;
+    
+    DROP TABLE IF EXISTs photovit.tmp;
     
 END $$
 DELIMITER ;
