@@ -3,7 +3,7 @@ package be.nss.vit2print.dto;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_LIBRARY_ID;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_USERNAME;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_LIBRARY_ID_PATTERN;
-import static be.nss.vit2print.validation.ValidationPatterns.ASSET_ID_OR_LIBRARY_ID_PATTERN;
+import static be.nss.vit2print.validation.ValidationPatterns.LIBRARY_ID_PATTERN;
 
 import javax.validation.constraints.Pattern;
 
@@ -15,7 +15,7 @@ public class GetLevelsInputDTO {
 	private String username;
 
 	@NotBlank(message = INVALID_LIBRARY_ID)
-	@Pattern(regexp = ASSET_ID_OR_LIBRARY_ID_PATTERN, message = INVALID_LIBRARY_ID_PATTERN)
+	@Pattern(regexp = LIBRARY_ID_PATTERN, message = INVALID_LIBRARY_ID_PATTERN)
 	private String libraryId;
 
 	/*

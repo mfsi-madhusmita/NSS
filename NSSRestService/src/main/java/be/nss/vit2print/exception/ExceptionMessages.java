@@ -8,7 +8,7 @@ public interface ExceptionMessages {
 	String INVALID_USERNAME = "Username is not valid";
 	String INVALID_PASSWORD = "Password is not valid";
 	String INTERNAL_SERVER_ERROR = "Internal server error";
-	String INVALID_LIBRARY_ID_PATTERN = "Invalid library id. Expected format: number or number_number";
+	String INVALID_LIBRARY_ID_PATTERN = "Invalid library id, Expected format: number or number_number";
 	String INVALID_ASSET_SEARCH_SORT_BY = "Invalid sortBy parameter, expected FILENAME or ACCESSED or IMPORTTIME ";
 	String INVALID_SEARCH_LEVELS = "Invalid search levels";
 	String INVALID_PAGE = "Invalid Page";
@@ -16,6 +16,6 @@ public interface ExceptionMessages {
 	String INVALID_SEARCH_VALUE = "Invalid search value";
 	String INVALID_SORT_ORDER = "Invalid sort order";
 	String INVALID_RECURSE = "Invalid recurse";
-	String INVALID_ASSET_ID = "Invalid asset id";
+	String INVALID_ASSET_ID = "Invalid asset id, Expected format: number_number";
 	String UNKNOWN_ASSET_ID = "Unknown asset id";
 }
