@@ -1,7 +1,7 @@
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `photovit_prototype`.`sp_PhotoVit_GetAssetKeywords`$$
 CREATE 
-/*DEFINER=`root`@`%` */
+DEFINER=`root`@`%`
 PROCEDURE  `photovit_prototype`.`sp_PhotoVit_GetAssetKeywords`(
     v_user_name VARCHAR(255), v_library_id INT(11), v_asset_id_list TEXT)
 BEGIN

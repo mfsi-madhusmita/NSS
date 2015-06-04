@@ -1,7 +1,7 @@
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `photovit_prototype`.`sp_PhotoVit_GetAssets`$$
 CREATE 
-/*DEFINER=`root`@`%`*/
+DEFINER=`root`@`%`
 PROCEDURE  `photovit_prototype`.`sp_PhotoVit_GetAssets`(
     v_user_name VARCHAR(255), v_library_id INT(11), v_level_list_str TEXT, v_page INT(11),
     v_asset_per_page INT(11), v_is_recurse BOOL, v_sort_field VARCHAR(100), v_sort_order VARCHAR(25),

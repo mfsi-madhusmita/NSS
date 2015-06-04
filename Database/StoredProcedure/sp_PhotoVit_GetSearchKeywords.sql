@@ -1,7 +1,7 @@
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `photovit_prototype`.`sp_PhotoVit_GetSearchKeywords`$$
 CREATE 
-/*DEFINER=`root`@`%` */
+DEFINER=`root`@`%`
 PROCEDURE  `photovit_prototype`.`sp_PhotoVit_GetSearchKeywords`(v_library_id INT(11))
 BEGIN
 

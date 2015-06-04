@@ -1,7 +1,7 @@
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `photovit_prototype`.`sp_PhotoVit_GetSpecifiedLevel`$$
 CREATE 
-/*DEFINER=`root`@`%` */
+DEFINER=`root`@`%`
 PROCEDURE  `photovit_prototype`.`sp_PhotoVit_GetSpecifiedLevel`(
     v_user_name VARCHAR(255), v_library_id INT(11), v_category_id INT(11))
 BEGIN
