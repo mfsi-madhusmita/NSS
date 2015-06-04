@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,10 +39,12 @@ public class ApiExceptionHandler {
 	}
 
 	/**
-	 * Exception handler for Data validation exception
+	 * Exception handler for Data validation exception and Invalid HTTP Method
+	 * means for BAD REQUEST
 	 */
 	@ExceptionHandler({ MethodArgumentNotValidException.class,
-			BindException.class, HttpMessageNotReadableException.class })
+			BindException.class, HttpMessageNotReadableException.class,
+			HttpRequestMethodNotSupportedException.class })
 	public ResponseEntity<ErrorDTO> handleDataValidationException(Exception e) {
 		String errorMessage = null;
 
@@ -56,6 +59,9 @@ public class ApiExceptionHandler {
 		} else if (e instanceof HttpMessageNotReadableException) {
 			HttpMessageNotReadableException je = (HttpMessageNotReadableException) e;
 			errorMessage = je.getMostSpecificCause().getMessage();
+		} else if (e instanceof HttpRequestMethodNotSupportedException) {
+			HttpRequestMethodNotSupportedException he = (HttpRequestMethodNotSupportedException) e;
+			errorMessage = he.getMessage();
 		}
 
 		logger.error(errorMessage, e);

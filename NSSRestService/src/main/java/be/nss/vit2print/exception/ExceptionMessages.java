@@ -18,4 +18,5 @@ public interface ExceptionMessages {
 	String INVALID_RECURSE = "Invalid recurse";
 	String INVALID_ASSET_ID = "Invalid asset id, Expected format: number_number";
 	String UNKNOWN_ASSET_ID = "Unknown asset id";
+	String INVALID_LOGIN_JSON = "Invalid JSON format of credentials, Expected format \n{\n\t\"username\":\"username\",\n\t\"password\":\"password\"\n} ";
 }
