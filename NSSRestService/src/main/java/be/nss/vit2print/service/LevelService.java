@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +36,10 @@ public class LevelService {
 	public LevelData getLevelData(GetLevelsInputDTO getLevelsInputDTO)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		// String username = ((User) SecurityContextHolder.getContext()
-		// .getAuthentication().getPrincipal()).getUsername();
+		String username = ((User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal()).getUsername();
 
-		String username = getLevelsInputDTO.getUsername();
+		// String username = getLevelsInputDTO.getUsername();
 
 		String[] parsedLibraryId = parseLibraryId(getLevelsInputDTO
 				.getLibraryId());

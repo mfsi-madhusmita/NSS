@@ -23,6 +23,10 @@ public class WebAppInit implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletContext)
 			throws ServletException {
 		WebApplicationContext context = getContext();
+
+		// register ApplicationSessionListener for session time out
+		servletContext.addListener(new ApplicationSessionListener());
+		// register Spring ContextLoaderListener
 		servletContext.addListener(new ContextLoaderListener(context));
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
 				DISPATCHER_SERVLET_NAME, new DispatcherServlet(context));

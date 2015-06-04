@@ -25,7 +25,7 @@ public class SecurityExceptionHandler {
 
 	public void handleExceptions(HttpServletRequest request,
 			HttpServletResponse response, Exception e) throws IOException {
-		logger.error(e.getMessage(), e);
+		logger.error(e.getMessage());
 
 		response.setContentType("application/json");
 		if (e instanceof APIException) {
@@ -35,6 +35,7 @@ public class SecurityExceptionHandler {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} else {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			logger.error(e.getMessage(),e);
 		}
 
 		new ObjectMapper().writeValue(response.getOutputStream(), new ErrorDTO(

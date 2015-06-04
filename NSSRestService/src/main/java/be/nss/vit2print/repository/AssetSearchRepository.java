@@ -1,5 +1,6 @@
 package be.nss.vit2print.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -40,13 +41,14 @@ public class AssetSearchRepository extends JdbcDaoSupport {
 	/**
 	 * Repository method for findAssets
 	 */
-	public List<Asset> findAssets(AssetSearchDTO assetSearch) {
+	public List<Asset> findAssets(AssetSearchDTO assetSearch, String username) {
 		List<Asset> assets = null;
 		try {
+			logger.info("Executing sql query " + GETASSETS_SQL + ", "
+					+ new Date().toString());
 			assets = getJdbcTemplate().query(
 					GETASSETS_SQL,
-					new Object[] { assetSearch.getUsername(),
-							assetSearch.getLibraryId(),
+					new Object[] { username, assetSearch.getLibraryId(),
 							assetSearch.getSearchLevel(),
 							assetSearch.getPage(),
 							assetSearch.getAssetPerPage(),
@@ -57,6 +59,8 @@ public class AssetSearchRepository extends JdbcDaoSupport {
 		} catch (DataAccessException e) {
 			logger.warn(e.getMessage());
 		}
+		logger.info("Execution of sql query " + GETASSETS_SQL
+				+ " has completed" + ", " + new Date().toString());
 		return assets;
 	}
 
@@ -67,12 +71,16 @@ public class AssetSearchRepository extends JdbcDaoSupport {
 			String assetIdsAsAString) {
 		List<KeywordGroup> keywordGroups = null;
 		try {
+			logger.info("Executing sql query " + GETKEYWORDGROUPS_SQL + ", "
+					+ new Date().toString());
 			keywordGroups = getJdbcTemplate().query(GETKEYWORDGROUPS_SQL,
 					new Object[] { username, libraryId, assetIdsAsAString },
 					new KeywordGroupRowMapper());
 		} catch (DataAccessException e) {
 			logger.warn(e.getMessage());
 		}
+		logger.info("Execution of sql query " + GETKEYWORDGROUPS_SQL
+				+ " has completed" + ", " + new Date().toString());
 		return keywordGroups;
 	}
 }

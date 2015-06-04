@@ -3,6 +3,8 @@ package be.nss.vit2print.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import be.nss.vit2print.dto.AssetSearchDTO;
@@ -26,8 +28,11 @@ public class AssetSearchService {
 	 */
 	public AssetData searchAssetData(AssetSearchDTO assetSearch) {
 		utility.transformAssetSearchDTO(assetSearch);
+		String username = ((User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal()).getUsername();
 		AssetData assetData = null;
-		List<Asset> assets = asssetSearchRepository.findAssets(assetSearch);
+		List<Asset> assets = asssetSearchRepository.findAssets(assetSearch,
+				username);
 
 		if (assets != null) {
 			for (Asset asset : assets) {
@@ -37,7 +42,7 @@ public class AssetSearchService {
 			}
 			List<Asset> transformedAssets = utility
 					.transformAssetsWithKeywordGroup(asssetSearchRepository
-							.findKeywordGroups(assetSearch.getUsername(),
+							.findKeywordGroups(username,
 									assetSearch.getLibraryId(),
 									utility.transformAssetIdsToString(assets)),
 							assets, String.valueOf(assetSearch.getLibraryId()));
