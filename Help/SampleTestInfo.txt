@@ -1,0 +1,69 @@
+NOTE: In order to access getLevels api, assets search api and Thumbnail asset api user first have to Login into application via Login API unless, user will get
+      a Error with HTTP CODE 401 Unauthorized and JSON MESSAGE {message: "Full authentication is required to access this resource"}.
+
+NOTE: After successful login a session will get started, session gets expired only after successful logout or automatic session expiration.
+      
+NOTE: As of now session expiration time is set to 10 minutes.
+
+NOTE: To test POST APIs we are using “Advanced REST Client” plug-in from Chrome. You can choose any other tool from browser to test the same.
+
+Prototype API URLS
+
+1. Login API 
+
+URL:http://localhost:8080/NSS/login
+Nature: HTTP POST
+
+Requires payload in JSON format
+sample data:{"username":"systemadmin","password":"systemadmin"}
+
+Success:HTTP CODE 200 OK.
+Failure: HTTP CODE 401 Unauthorized and JSON MESSAGE {message: "Bad credentials"}.
+
+2. Logout API
+
+URL:http://localhost:8080/NSS/logout
+Nature: HTTP POST
+
+Requires no payload
+Success:HTTP CODE 200 OK.
+
+3. getLevels API
+
+URL:http://localhost:8080/NSS/getLevels?libraryId=?
+Nature: HTTP GET
+
+SAMPLE DATA: 
+
+3.1 when libraryId=3_5
+
+http://localhost:8080/NSS/getLevels?libraryId=3_5
+Output won't include searchkeywords
+
+sample output at http://www.jsoneditoronline.org/?id=0427be52f76eb17060f042db9a37629f
+
+3.2 when libraryId=3
+
+Output will include multiple searchkeyword
+
+http://localhost:8080/NSS/getLevels?libraryId=3
+
+sample output at http://www.jsoneditoronline.org/?id=0427be52f76eb17060f042db9a3a12fc
+
+4. assets search API
+
+URL:http://localhost:8080/NSS/search/assets
+NATURE: HTTP POST
+
+Requires payload in JSON format
+sample data:{"libraryId":3,"sortOrder":"ASC","sortBy":"importtime","page":1,"assetPerPage":10,"searchValue":"in","recurse":"Y","searchlevels":["0y"]}
+
+sample output at http://jsoneditoronline.org/?id=73fefe810816450fdd2e276032bf3ca3
+
+5. Thumbnail asset api
+
+URL: http://localhost:8080/NSS/photovit_action/Thumb?assetId=?
+Nature: HTTP GET
+
+sample URL http://localhost:8080/NSS/photovit_action/Thumb?assetId=34_82 
+
