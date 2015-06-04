@@ -11,7 +11,8 @@ Prototype API URLS
 
 1. Login API 
 
-URL:http://localhost:8080/NSS/login
+URL:
+	http://test.nss.be:8080/NSS/login
 Nature: HTTP POST
 
 Requires payload in JSON format
@@ -22,7 +23,8 @@ Failure: HTTP CODE 401 Unauthorized and JSON MESSAGE {message: "Bad credentials"
 
 2. Logout API
 
-URL:http://localhost:8080/NSS/logout
+URL:
+	http://test.nss.be:8080/NSS/logout
 Nature: HTTP POST
 
 Requires no payload
@@ -30,40 +32,48 @@ Success:HTTP CODE 200 OK.
 
 3. getLevels API
 
-URL:http://localhost:8080/NSS/getLevels?libraryId=?
+URL:
+	http://test.nss.be:8080/NSS/getLevels?libraryId=14
 Nature: HTTP GET
 
 SAMPLE DATA: 
 
-3.1 when libraryId=3_5
+3.1 when libraryId=14_1
 
-http://localhost:8080/NSS/getLevels?libraryId=3_5
+http://test.nss.be:8080/NSS/getLevels?libraryId=14_1
 Output won't include searchkeywords
 
 sample output at http://www.jsoneditoronline.org/?id=0427be52f76eb17060f042db9a37629f
 
-3.2 when libraryId=3
+3.2 when libraryId=14
 
 Output will include multiple searchkeyword
 
-http://localhost:8080/NSS/getLevels?libraryId=3
+http://test.nss.be:8080/NSS/getLevels?libraryId=14
 
 sample output at http://www.jsoneditoronline.org/?id=0427be52f76eb17060f042db9a3a12fc
 
 4. assets search API
 
-URL:http://localhost:8080/NSS/search/assets
+URL:
+	http://test.nss.be:8080/NSS/search/assets
 NATURE: HTTP POST
 
 Requires payload in JSON format
-sample data:{"libraryId":3,"sortOrder":"ASC","sortBy":"importtime","page":1,"assetPerPage":10,"searchValue":"in","recurse":"Y","searchlevels":["0y"]}
+sample data:{"libraryId”:14,”sortOrder":"ASC","sortBy":"importtime","page":1,"assetPerPage":10,"searchValue”:”a”,”recurse":"Y","searchlevels":["0y"]}
 
-sample output at http://jsoneditoronline.org/?id=73fefe810816450fdd2e276032bf3ca3
+sample output at 
+	http://jsoneditoronline.org/?id=73fefe810816450fdd2e276032bf3ca3
 
 5. Thumbnail asset api
 
-URL: http://localhost:8080/NSS/photovit_action/Thumb?assetId=?
+URL: http://test.nss.be:8080/NSS/photovit_action/Thumb?assetId=?
+Here “?” will contain [library]_[assetid]
 Nature: HTTP GET
 
-sample URL http://localhost:8080/NSS/photovit_action/Thumb?assetId=34_82 
+sample URL 
+IMAGE File: 
+	http://test.nss.be:8080/NSS/photovit_action/Thumb?assetId=14_66
+ZIP file: 
+	http://test.nss.be:8080/NSS/photovit_action/Thumb?assetId=14_46
 

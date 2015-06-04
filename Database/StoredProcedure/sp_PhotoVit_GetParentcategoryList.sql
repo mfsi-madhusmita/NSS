@@ -27,7 +27,7 @@ DECLARE v_category_id TEXT DEFAULT NULL;
  END IF;
  
  SET @parent_category_list = CONCAT("UPDATE photovit.tmp tmp SET tmp.category= (SELECT GROUP_CONCAT(CONCAT(" , v_library_id, ", '_', cat.category_id, '+', cat.reference) SEPARATOR '|')" ,
-	" FROM photovit.category_3 cat WHERE cat.category_id IN(" , left(v_ids,length(v_ids)-1) , ") AND cat.category_id <> " , v_category_id , 
+	" FROM photovit.category_" , v_library_id , " cat WHERE cat.category_id IN(" , left(v_ids,length(v_ids)-1) , ") AND cat.category_id <> " , v_category_id , 
     ") WHERE tmp.category_id = " , v_category_id);
 
 #SELECT @parent_category_list;
