@@ -2,6 +2,8 @@ package be.nss.vit2print.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -22,6 +24,9 @@ public class AssetSearchService {
 
 	@Autowired
 	private AssetSearchTransformUtility utility;
+
+	@Autowired
+	private HttpServletRequest request;
 
 	/**
 	 * Service method for search assets api
@@ -46,6 +51,9 @@ public class AssetSearchService {
 									assetSearch.getLibraryId(),
 									utility.transformAssetIdsToString(assets)),
 							assets, String.valueOf(assetSearch.getLibraryId()));
+
+			utility.addThumbStringUrlToEachAsset(transformedAssets, request
+					.getRequestURL().toString(), request.getPathInfo());
 
 			assetData = prepareAssetData(transformedAssets,
 					assetSearch.getPage());
