@@ -28,6 +28,7 @@ public class AssetSearchTransformUtility {
 	private static final String TOKEN_FOR_ASSET_ID = "\\_";
 	private static final String TOKEN_TO_COMPLETE_ASSETID = "_";
 	private static final String TOKEN_FOR_SEARCHLEVEL_AND_ASSETIDS = ",";
+	private static final String ASSET_THUMB_FILE_SERVICE_Path = "/photovit_action/Thumb?assetId=";
 
 	@Autowired
 	private StringParser parser;
@@ -105,6 +106,18 @@ public class AssetSearchTransformUtility {
 			}
 		}
 		return assets;
+	}
+
+	public void addThumbStringUrlToEachAsset(List<Asset> assets,
+			String requestUrl, String pathInfo) {
+		if (assets != null && assets.size() > 0) {
+			for (Asset asset : assets) {
+				if (asset != null && asset.getAssetId() != null) {
+					asset.setThumbString(prepareThumbStringURL(requestUrl,
+							pathInfo, asset.getAssetId()));
+				}
+			}
+		}
 	}
 
 	private String transformRecurse(String recurse) {
@@ -272,5 +285,16 @@ public class AssetSearchTransformUtility {
 		sb.append(TOKEN_TO_COMPLETE_ASSETID);
 		sb.append(keywordGroup.getAssetId());
 		keywordGroup.setAssetId(sb.toString());
+	}
+
+	/**
+	 * Helper method to dynamically create thumbstring url
+	 */
+	private String prepareThumbStringURL(String requestUrl, String pathInfo,
+			String assetId) {
+		StringBuilder urlBuilder = new StringBuilder(
+				parser.doDeleteStringPattern(requestUrl, pathInfo));
+		return urlBuilder.append(ASSET_THUMB_FILE_SERVICE_Path).append(assetId)
+				.toString();
 	}
 }

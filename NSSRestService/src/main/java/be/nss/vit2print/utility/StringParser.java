@@ -22,4 +22,9 @@ public class StringParser {
 	public String doTokenizeList(List<String> listToTokenize, String token) {
 		return StringUtils.collectionToDelimitedString(listToTokenize, token);
 	}
+
+	public String doDeleteStringPattern(String inputString,
+			String patternToDelete) {
+		return StringUtils.delete(inputString, patternToDelete);
+	}
 }

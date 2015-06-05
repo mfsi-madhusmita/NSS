@@ -4,14 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import be.nss.vit2print.model.Asset;
 import be.nss.vit2print.model.AssetAction;
 import be.nss.vit2print.model.AssetLevel;
 
+@Component
 public class AssetRowMapper implements RowMapper<Asset> {
-
-	private static final String ASSET_THUMB_FILE_URL = "localhost:8080/NSS/photovit_action/Thumb?assetId=";
 
 	@Override
 	public Asset mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -51,20 +51,6 @@ public class AssetRowMapper implements RowMapper<Asset> {
 		asset.setAssetAction(assetAction);
 		asset.setBasketAssetCount(rs.getInt("basketassetcount"));
 
-		prepareThumbStringData(asset);
-
 		return asset;
-	}
-
-	private void prepareThumbStringData(Asset asset) {
-		String assetId = asset.getAssetId();
-		StringBuilder thumbStringBuilder = null;
-		if (assetId != null) {
-			thumbStringBuilder = new StringBuilder(ASSET_THUMB_FILE_URL)
-					.append(assetId);
-		}
-		String thumbString = thumbStringBuilder != null ? thumbStringBuilder
-				.toString() : null;
-		asset.setThumbString(thumbString.toString());
 	}
 }
