@@ -111,6 +111,11 @@ BEGIN
     #SELECT * FROM photovit.tmp;
     #DROP TABLE IF EXISTs photovit.tmp;
     
+    IF (trim(v_search_val) = '') THEN
+		SET v_search_val = '';
+	ELSE
+		SET v_search_val = CONCAT(" AND a.googlefield LIKE '%" , v_search_val , "%'");
+    END IF;
     
     #SELECT v_sort_logic;
     
@@ -141,7 +146,7 @@ BEGIN
         " IF(COUNT(lk.id) > 0, 'Y', 'N') AS similarsearch " ,
         " FROM photovit.asset_" , v_library_id , " a " ,
         " INNER JOIN photovit.library l ON l.library_id =  " , v_library_id ,
-        " INNER JOIN photovit.category_" , v_library_id , " cat ON cat.category = a.category " ,
+        " LEFT JOIN photovit.category_" , v_library_id , " cat ON cat.category = a.category " ,
         " LEFT JOIN photovit.basket_asset ba ON ba.asset_id = a.asset_id " ,
 		" LEFT JOIN vit2print.user usr ON usr.user_id = l.user_id " , 
 		" LEFT JOIN photovit.library_keyword lk ON lk.library_id = l.library_id AND similar = 'Y'" ,
@@ -149,11 +154,10 @@ BEGIN
         " LEFT JOIN photovit.user_library ul ON ul.library_id = l.library_id " ,
         " LEFT JOIN photovit.user_category uc ON uc.category_id = cat.category_id "
 
-        " WHERE a.status = 'active' AND a.googlefield LIKE '%" , 
-			v_search_val , "%' AND " ,
+        " WHERE a.status = 'active' " , v_search_val , " AND " ,
 			v_asset_recurse_logic ,
-            " AND usr.username = '" , v_user_name , "'" ,
-		" GROUP BY ba.asset_id " ,
+            #" AND usr.username = '" , v_user_name , "'" ,
+		" GROUP BY a.asset_id " ,
             " " , v_sort_logic , " " , v_limit_logic);
         
 	#SELECT @final_query;
