@@ -31,9 +31,10 @@ BEGIN
     
     DECLARE v_is_super_user VARCHAR(2) DEFAULT 'N';
     DECLARE v_is_admin VARCHAR(2) DEFAULT 'N';
+    DECLARE v_user_id INT(11) DEFAULT 0;
     
     # Check for SuperUser
-    SELECT issuperuser INTO v_is_super_user
+    SELECT issuperuser, user_id INTO v_is_super_user, v_user_id
 	FROM vit2print.user usr
 	/*INNER JOIN vit2print.authstrings auth
 		ON auth.user_id = usr.user_id*/
@@ -93,67 +94,89 @@ BEGIN
         v_disapproveAsset , " AS disapproveAsset");    
         
 	-- End of Action details --
-    /*
-    SET v_cnt_asset_query = IF (v_category_id > 0 ,
-    	CONCAT("(SELECT COUNT(ass.asset_id) " , 
-		"FROM photovit.asset_" , v_library_id , " ass " ,
-		"WHERE ass.category LIKE  CONCAT((SELECT category FROM photovit.category_" , v_library_id , " cat " , 
-			"WHERE cat.category_id = " , v_category_id ,
-			"), '%') " ,
-		") cntAsset"),
+
+	# Fetch all available assets for libraries when library id ero will be send
+    IF (v_library_id = 0) THEN
+		DROP TABLE IF EXISTS photovit.asset_tmp;
+		SET @tmp_table_query = CONCAT("CREATE TEMPORARY TABLE IF NOT EXISTS photovit.asset_tmp  AS (SELECT library_id AS id, 0 AS cntAsset" ,
+       " FROM photovit.library " ,
+		"WHERE (user_id = " , v_user_id , ") " , 
+			"OR ((usergrouppath='0y' AND scope = 'PUBLIC') " ,
+            "OR (usergrouppath LIKE '0y", v_user_id , "%' AND scope = 'PUBLIC')))");
+         #SELECT @tmp_table_query;
+         
+		-- -----------------------------------------------------
+		-- Execute the above query string
+		-- -----------------------------------------------------
+		PREPARE STMT FROM @tmp_table_query;
+		EXECUTE STMT;  
         
-        CONCAT("(SELECT COUNT(ass.asset_id) " , 
-		"FROM photovit.asset_" , v_library_id , " ass ",
-		") cntAsset"));
-	*/
-    SET v_cnt_asset_query = CONCAT("(SELECT COUNT(ass.asset_id) " , 
-		"FROM photovit.asset_" , v_library_id , " ass " ,
-		"WHERE ass.category LIKE  CONCAT((SELECT category FROM photovit.category_" , v_library_id , " cat " , 
-			"WHERE cat.category_id = cat1.category_id), '%') " ,
-		") cntAsset");        
+        # Manipulate asset count against all available library based on criteria
+        call photovit_prototype.sp_PhotoVit_GetAssetCountForLevels();
         
-	#SELECT v_cnt_asset_query;
+        #SELECT * FROM photovit.asset_tmp;
+         
+		SET @get_level_query =  CONCAT("SELECT lib.library_id AS id, lib.reference AS name, lib.usergrouppath AS idPath, lib.scope, " ,
+			" 0 AS parentId, " ,
+			" '' AS pathName, tmp.cntAsset AS cntAsset," ,
+            @v_action_detail_query ,
+        " FROM photovit.library lib " ,
+        "LEFT JOIN photovit.asset_tmp tmp ON tmp.id = lib.library_id "
+		"WHERE (user_id = " , v_user_id , ") " , 
+			"OR ((usergrouppath='0y' AND scope = 'PUBLIC') " ,
+            "OR (usergrouppath LIKE '0y", v_user_id , "%' AND scope = 'PUBLIC'))");
+
+	ELSE
     
-    SET @get_level_query =  CONCAT("SELECT id, name, idPath, scope, ", 
-		" IF (pcategory_id > 0, CONCAT(parentId, '_', pcategory_id), parentId) AS parentId, " ,
-		" IF (pathName != null, pathName, CONCAT(reference , ' > ' , name)) AS pathName, cntAsset," ,
-        " IF (cntAsset > 0 , 'Y' , 'N') AS hasChildren, ",
-        @v_action_detail_query ,
-	" FROM (",
-	"SELECT cat1.pcategory_id, cat1.reference AS name, cat1.category, " , 
-    	" cat1.category AS idPath, CONCAT(lib.library_id, '_', cat1.category_id) AS id, " ,
-        " lib.library_id AS parentId, ",
-        " IF (" , v_category_id , " > 0, 'CATEGORY', 'LIBRARY') AS type, ",
-        " lib.*," ,
-    	"(SELECT GROUP_CONCAT(reference SEPARATOR ' > ') AS pathName FROM (" , 
-			" SELECT @r AS _id," ,
-				"(SELECT @r := pcategory_id FROM photovit.category_" , v_library_id , " WHERE category_id = _id LIMIT 1) AS parent_id," ,
-				" @l := @l + 1 AS lvl " ,
-			" FROM " ,
-				"(SELECT @r := " , v_category_id , " , @l := 0) vars," ,
-				" photovit.category_" , v_library_id , " m " ,
-			"WHERE @r <> 0) T1 " ,
-		"JOIN photovit.category_" , v_library_id , " T2 " ,
-		"ON T1._id = T2.category_id " , 
-		"ORDER BY T1.lvl DESC"        
-	") AS pathName," , 
-	v_cnt_asset_query ,
-	" FROM photovit.category_" , v_library_id , " cat1 ", 
-	" LEFT JOIN photovit.category_" , v_library_id , " cat2 " , 
-		" ON cat2.category_id = cat1.pcategory_id " ,
-	" LEFT JOIN photovit.asset_" , v_library_id , " ass " , 
-		" ON ass.asset_id IN (" ,
-				"SELECT category " ,
-				" FROM photovit.category_" , v_library_id , " cat" ,
-				" WHERE cat.pcategory_id >= " , v_category_id ,
-			") " ,
-	" INNER JOIN photovit.library lib " ,
-		" ON lib.library_id = " , v_library_id ,
-	" WHERE cat1.pcategory_id = " , v_category_id , 
-	" GROUP BY cat1.category_id) baseTable"
-    );
-    
-    #SELECT @get_level_query;
+		SET v_cnt_asset_query = CONCAT("(SELECT COUNT(ass.asset_id) " , 
+			"FROM photovit.asset_" , v_library_id , " ass " ,
+			"WHERE ass.category LIKE  CONCAT((SELECT category FROM photovit.category_" , v_library_id , " cat " , 
+				"WHERE cat.category_id = cat1.category_id), '%') " ,
+			") cntAsset");        
+			
+		#SELECT v_cnt_asset_query;
+		
+		SET @get_level_query =  CONCAT("SELECT id, name, idPath, scope, ", 
+			" IF (pcategory_id > 0, CONCAT(parentId, '_', pcategory_id), parentId) AS parentId, " ,
+			" IF (pathName != null, pathName, CONCAT(reference , ' > ' , name)) AS pathName, cntAsset," ,
+			" IF (cntAsset > 0 , 'Y' , 'N') AS hasChildren, ",
+			@v_action_detail_query ,
+		" FROM (",
+		"SELECT cat1.pcategory_id, cat1.reference AS name, cat1.category, " , 
+			" cat1.category AS idPath, CONCAT(lib.library_id, '_', cat1.category_id) AS id, " ,
+			" lib.library_id AS parentId, ",
+			" IF (" , v_category_id , " > 0, 'CATEGORY', 'LIBRARY') AS type, ",
+			" lib.*," ,
+			"(SELECT GROUP_CONCAT(reference SEPARATOR ' > ') AS pathName FROM (" , 
+				" SELECT @r AS _id," ,
+					"(SELECT @r := pcategory_id FROM photovit.category_" , v_library_id , " WHERE category_id = _id LIMIT 1) AS parent_id," ,
+					" @l := @l + 1 AS lvl " ,
+				" FROM " ,
+					"(SELECT @r := " , v_category_id , " , @l := 0) vars," ,
+					" photovit.category_" , v_library_id , " m " ,
+				"WHERE @r <> 0) T1 " ,
+			"JOIN photovit.category_" , v_library_id , " T2 " ,
+			"ON T1._id = T2.category_id " , 
+			"ORDER BY T1.lvl DESC"        
+		") AS pathName," , 
+		v_cnt_asset_query ,
+		" FROM photovit.category_" , v_library_id , " cat1 ", 
+		" LEFT JOIN photovit.category_" , v_library_id , " cat2 " , 
+			" ON cat2.category_id = cat1.pcategory_id " ,
+		" LEFT JOIN photovit.asset_" , v_library_id , " ass " , 
+			" ON ass.asset_id IN (" ,
+					"SELECT category " ,
+					" FROM photovit.category_" , v_library_id , " cat" ,
+					" WHERE cat.pcategory_id >= " , v_category_id ,
+				") " ,
+		" INNER JOIN photovit.library lib " ,
+			" ON lib.library_id = " , v_library_id ,
+		" WHERE cat1.pcategory_id = " , v_category_id , 
+		" GROUP BY cat1.category_id) baseTable"
+		);
+	END IF;
+   
+	#SELECT @get_level_query;
     
  	-- -----------------------------------------------------
 	-- Execute the above query string
@@ -165,6 +188,8 @@ BEGIN
 	-- Deallocate prepared statement
 	-- -----------------------------------------------------
 	DEALLOCATE PREPARE STMT;
+    
+    DROP TABLE IF EXISTS photovit.asset_tmp;
 	
 END $$
 DELIMITER ;
