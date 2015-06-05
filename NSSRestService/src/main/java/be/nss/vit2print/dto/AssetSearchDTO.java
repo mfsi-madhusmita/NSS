@@ -6,7 +6,6 @@ import static be.nss.vit2print.exception.ExceptionMessages.INVALID_LIBRARY_ID;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_PAGE;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_RECURSE;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_SEARCH_LEVELS;
-import static be.nss.vit2print.exception.ExceptionMessages.INVALID_SEARCH_VALUE;
 import static be.nss.vit2print.exception.ExceptionMessages.INVALID_SORT_ORDER;
 
 import javax.validation.Valid;
@@ -23,8 +22,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AssetSearchDTO {
 
-/*	@NotBlank(message = INVALID_USERNAME)
-	private String username;*/
+	/*
+	 * @NotBlank(message = INVALID_USERNAME) private String username;
+	 */
 
 	@Min(value = 1, message = INVALID_LIBRARY_ID)
 	private int libraryId;
@@ -51,7 +51,10 @@ public class AssetSearchDTO {
 	@Pattern(regexp = "Y|N", message = INVALID_RECURSE)
 	private String recurse;
 
-	@NotBlank(message = INVALID_SEARCH_VALUE)
+	/*
+	 * Commented Bean validation on searchValue field as requested by BRAM
+	 */
+	// @NotBlank(message = INVALID_SEARCH_VALUE)
 	private String searchValue;
 
 	@JsonIgnore

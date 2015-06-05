@@ -58,11 +58,13 @@ public class AssetRowMapper implements RowMapper<Asset> {
 
 	private void prepareThumbStringData(Asset asset) {
 		String assetId = asset.getAssetId();
-		StringBuilder thumbString = null;
+		StringBuilder thumbStringBuilder = null;
 		if (assetId != null) {
-			thumbString = new StringBuilder(ASSET_THUMB_FILE_URL)
+			thumbStringBuilder = new StringBuilder(ASSET_THUMB_FILE_URL)
 					.append(assetId);
 		}
+		String thumbString = thumbStringBuilder != null ? thumbStringBuilder
+				.toString() : null;
 		asset.setThumbString(thumbString.toString());
 	}
 }
