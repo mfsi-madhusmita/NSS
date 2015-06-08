@@ -118,7 +118,7 @@ BEGIN
          
 		SET @get_level_query =  CONCAT("SELECT lib.library_id AS id, lib.reference AS name, lib.usergrouppath AS idPath, lib.scope, " ,
 			" 0 AS parentId, " ,
-			" '' AS pathName, tmp.cntAsset AS cntAsset," ,
+			" lib.reference AS pathName, tmp.cntAsset AS cntAsset," ,
             @v_action_detail_query ,
         " FROM photovit.library lib " ,
         "LEFT JOIN photovit.asset_tmp tmp ON tmp.id = lib.library_id "
