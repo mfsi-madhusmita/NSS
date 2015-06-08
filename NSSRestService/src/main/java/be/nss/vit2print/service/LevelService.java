@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import be.nss.vit2print.dto.GetLevelsInputDTO;
 import be.nss.vit2print.model.Level;
@@ -32,7 +31,6 @@ public class LevelService {
 	/**
 	 * Service method for getLevels API
 	 */
-	@Transactional(readOnly = true)
 	public LevelData getLevelData(GetLevelsInputDTO getLevelsInputDTO)
 			throws JsonParseException, JsonMappingException, IOException {
 

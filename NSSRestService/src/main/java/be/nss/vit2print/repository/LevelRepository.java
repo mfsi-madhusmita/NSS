@@ -50,7 +50,7 @@ public class LevelRepository extends JdbcDaoSupport {
 					new Object[] { username, libraryId, categoryId },
 					new LevelRowMapper());
 		} catch (DataAccessException e) {
-			logger.warn(e.getMessage());
+			logger.warn(e.getMessage(), e);
 		}
 		return levels;
 	}
@@ -64,7 +64,7 @@ public class LevelRepository extends JdbcDaoSupport {
 			searchKeywords = getJdbcTemplate().query(GETSEARCHKEYWORDS_SQL,
 					new Object[] { libraryId }, new SearchKeywordRowMapper());
 		} catch (DataAccessException e) {
-			logger.warn(e.getMessage());
+			logger.warn(e.getMessage(), e);
 		}
 		return searchKeywords;
 	}
@@ -81,7 +81,7 @@ public class LevelRepository extends JdbcDaoSupport {
 					new Object[] { username, libraryId, categoryId },
 					new SpecifiedLevelRowMapper());
 		} catch (DataAccessException e) {
-			logger.warn(e.getMessage());
+			logger.warn(e.getMessage(), e);
 		}
 		return specifiedLevel;
 	}
