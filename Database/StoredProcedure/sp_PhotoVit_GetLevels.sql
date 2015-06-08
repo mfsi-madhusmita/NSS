@@ -1,7 +1,7 @@
 DELIMITER $$
 DROP PROCEDURE IF EXISTS `photovit_prototype`.`sp_PhotoVit_GetLevels`$$
 CREATE 
-DEFINER=`root`@`%`
+DEFINER=`root`@`%`*
 PROCEDURE  `photovit_prototype`.`sp_PhotoVit_GetLevels`(
     v_user_name VARCHAR(255), v_library_id INT(11), v_category_id INT(11))
 BEGIN
@@ -9,7 +9,7 @@ BEGIN
 	-- -----------------------------------------------------
 	-- Desc: Fetch list of levels against a library
 	-- Created On: 05-14-2015
-	-- Modified On: 05-19-2015
+	-- Modified On: 06-08-2015
 	-- Created By: MINDFIRE SOLUTIONS
 	-- -----------------------------------------------------
 
@@ -119,6 +119,7 @@ BEGIN
 		SET @get_level_query =  CONCAT("SELECT lib.library_id AS id, lib.reference AS name, lib.usergrouppath AS idPath, lib.scope, " ,
 			" 0 AS parentId, " ,
 			" lib.reference AS pathName, tmp.cntAsset AS cntAsset," ,
+            " IF (cntAsset > 0 , 'Y' , 'N') AS hasChildren, ",
             @v_action_detail_query ,
         " FROM photovit.library lib " ,
         "LEFT JOIN photovit.asset_tmp tmp ON tmp.id = lib.library_id "
