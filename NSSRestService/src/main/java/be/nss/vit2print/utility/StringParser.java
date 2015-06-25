@@ -27,4 +27,12 @@ public class StringParser {
 			String patternToDelete) {
 		return StringUtils.delete(inputString, patternToDelete);
 	}
+
+	public boolean isBlank(String string) {
+		boolean isBlank = true;
+		if (string == null) {
+			return isBlank;
+		}
+		return StringUtils.isEmpty(string.trim());
+	}
 }

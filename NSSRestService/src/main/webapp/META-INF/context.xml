@@ -17,4 +17,9 @@
 		url="jdbc:mysql://localhost:3306/photovit_prototype" username="root"
 		password="mysql@admin" />
 
+	<Resource name="jdbc/VIT2PRINT" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://203.129.204.131:3306/vit2print" username="root"
+		password="testserver" />
+
 </Context>

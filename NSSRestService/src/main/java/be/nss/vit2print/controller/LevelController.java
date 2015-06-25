@@ -37,6 +37,7 @@ public class LevelController {
 	@RequestMapping(value = "/getLevels", method = RequestMethod.GET)
 	public LevelData getLevels(@Valid GetLevelsInputDTO getLevelsInputDTO)
 			throws JsonParseException, JsonMappingException, IOException {
+		logger.info("getLevels api has called..");
 		return levelService.getLevelData(getLevelsInputDTO);
 	}
 

@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Repository;
 public class UserRepository extends JdbcDaoSupport {
 
 	@Autowired
+	@Qualifier("photovitPrototypeDatasource")
 	private DataSource datasource;
 
 	/**

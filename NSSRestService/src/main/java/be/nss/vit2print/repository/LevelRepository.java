@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,7 @@ public class LevelRepository extends JdbcDaoSupport {
 	private static final String GETSPECIFIEDLEVEL_SQL = "call sp_PhotoVit_GetSpecifiedLevel(?,?,?)";
 
 	@Autowired
+	@Qualifier("photovitPrototypeDatasource")
 	private DataSource datasource;
 
 	/**

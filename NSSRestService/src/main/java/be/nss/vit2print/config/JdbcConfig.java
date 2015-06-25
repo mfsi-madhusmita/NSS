@@ -14,7 +14,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 /**
  * Jdbc Config Class
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:config.properties")
-public class JdbcConfig implements TransactionManagementConfigurer {
+public class JdbcConfig {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -33,17 +32,19 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 	/**
 	 * Return datasource after jndi lookup
 	 */
-	@Bean
+	@Bean(name = "photovitPrototypeDatasource")
 	public DataSource getDataSource() {
-		DataSource dataSource = null;
-		JndiTemplate jndiTemplate = new JndiTemplate();
-		String datasourceName = environment.getProperty("datasourceName");
-		try {
-			dataSource = (DataSource) jndiTemplate.lookup(datasourceName);
-		} catch (NamingException e) {
-			logger.error("NamingException for " + datasourceName, e);
-		}
-		return dataSource;
+		return getDatasourceByDatasourceName(environment
+				.getProperty("datasourceName"));
+	}
+
+	/**
+	 * Return vit2print datasource after jndi lookup
+	 */
+	@Bean(name = "vit2printDatasource")
+	public DataSource getVIT2PRINTDataSource() {
+		return getDatasourceByDatasourceName(environment
+				.getProperty("vit2printDatasourceName"));
 	}
 
 	/**
@@ -55,10 +56,25 @@ public class JdbcConfig implements TransactionManagementConfigurer {
 	}
 
 	/**
-	 * Enable annotation driven transaction management
+	 * Register transaction manager using vit2print datasource
 	 */
-	@Override
-	public PlatformTransactionManager annotationDrivenTransactionManager() {
-		return transactionManager();
+	@Bean
+	public PlatformTransactionManager transactionManagerForVit2print() {
+		return new DataSourceTransactionManager(getVIT2PRINTDataSource());
+	}
+
+	/**
+	 * 
+	 * Helper method to return datasource by datasourceName
+	 */
+	private DataSource getDatasourceByDatasourceName(String datasourceName) {
+		DataSource dataSource = null;
+		JndiTemplate jndiTemplate = new JndiTemplate();
+		try {
+			dataSource = (DataSource) jndiTemplate.lookup(datasourceName);
+		} catch (NamingException e) {
+			logger.error("JNDI NamingException for " + datasourceName, e);
+		}
+		return dataSource;
 	}
 }

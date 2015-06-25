@@ -69,6 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				UsernamePasswordAuthenticationFilter.class);
 
 		http.addFilterBefore(exceptionFilter, ChannelProcessingFilter.class);
+
+		// http.addFilterAfter(new ApplicationCSRFFilter(), CsrfFilter.class);
 	}
 
 	/**

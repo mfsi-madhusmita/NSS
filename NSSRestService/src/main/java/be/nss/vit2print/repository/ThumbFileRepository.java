@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class ThumbFileRepository extends JdbcDaoSupport {
 	private static final String GETASSETFILE_SQL = "call sp_PhotoVit_GetAssetFileDetail(?,?)";
 
 	@Autowired
+	@Qualifier("photovitPrototypeDatasource")
 	private DataSource datasource;
 
 	/**

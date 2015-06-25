@@ -32,7 +32,8 @@ public class ApplicationAuthenticationFilter extends
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private static final String loginContentType = "application/json";
+	// private static final String loginContentType = "application/json";
+	private static final String loginContentType = "application/json;charset=UTF-8";
 	private static final String loginHttpMethod = "POST";
 
 	@Autowired
@@ -45,6 +46,7 @@ public class ApplicationAuthenticationFilter extends
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request,
 			HttpServletResponse response) throws AuthenticationException {
+		
 		/*
 		 * HTTP Method for login should be POST
 		 */
@@ -57,7 +59,11 @@ public class ApplicationAuthenticationFilter extends
 		/*
 		 * Content type for login should be JSON
 		 */
-		if (!loginContentType.equals(request.getContentType())) {
+		String contentType = request.getContentType();
+		if (contentType != null) {
+			contentType = contentType.replaceAll("\\s+", "");
+		}
+		if (!loginContentType.equals(contentType)) {
 			StringBuilder message = new StringBuilder("Content Type ").append(
 					request.getContentType()).append(" Not Supported");
 			throw new AuthenticationServiceException(message.toString());

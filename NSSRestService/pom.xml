@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.nss.vit2print</groupId>
-	<artifactId>NSS</artifactId>
+	<artifactId>NSSREST</artifactId>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<name>NSSRestService</name>
@@ -164,7 +164,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>NSS</finalName>
+		<finalName>NSSREST</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
